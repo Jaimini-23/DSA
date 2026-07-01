@@ -247,15 +247,61 @@ vector<vector<int>> merge_overlapping_intervals(vector<vector<int>> &arr, int n)
 }
 
 
+void swapIfGreater(vector<int> &arr1, vector<int> &arr2, int ind1, int ind2) {
+    if(arr1[ind1] > arr2[ind2]) {
+        swap(arr1[ind1],arr2[ind2]);
+    }
+}
+void merge_two_sorted_arrays_without_extra_space(vector<int> &arr1, vector<int> &arr2, int n, int m) {
+    // two pointers
+    // TC: O(min(n,m)_worst + O(nlogn) + O(mlogm) ans SC: O(1))
+    // int left = n - 1;
+    // int right = 0;
+    // while(left >= 0 && right < m) {
+    //     if(arr1[left] > arr2[right]) {
+    //         swap(arr1[left], arr2[right]);
+    //         left--, right++;
+    //     }
+    //     else break;
+    // }
+    // sort(arr1.begin(),arr1.end());
+    // sort(arr2.begin(),arr2.end());
 
+    // Another Optimal (gap method)
+    // TC: O(log2(m+n)) * O(n+m) and SC: O(1)
+    int len = n + m;
+    int gap =  (len/2) + (len%2);        // GIF          // gap = (len + 1) / 2;
+    while(gap > 0) {
+        int left = 0;
+        int right = left + gap;
+        while(right < len) {
+            // arr1 and arr2
+            if(left < n && right >= n) {
+                swapIfGreater(arr1, arr2, left, right - n);
+            }
+            // arr2 and arr2
+            else if(left >= n) {
+                swapIfGreater(arr2, arr2, left - n, right - n);
+            }
+            // arr1 and arr1
+            else {
+                swapIfGreater(arr1, arr1, left, right);
+            }
+            left++, right++;
+        }
+        if(gap == 1) break;
+        gap = (gap/2) + (gap%2);              // gap = (gap + 1) / 2;
+    }
+
+}
 
 
 
 
 
 int main() {
-    int n ,r;
-    cin >> n >> r;
+    // int n ,r;
+    // cin >> n >> r;
     // vector<int> arr(n);
     // for(int i=0;i<n;i++) cin >> arr[i];
 
@@ -282,15 +328,24 @@ int main() {
 
     // count_subarray_with_xor_k(arr,n,r);
 
-    vector<vector<int>> intervals(n, vector<int>(2));
-    for(int i = 0; i < n; i++) {
-        cin >> intervals[i][0] >> intervals[i][1];
-    }
-    vector<vector<int>> result = merge_overlapping_intervals(intervals,n);
-    for (auto it : result) {
-        cout << it[0] << " " << it[1] << endl;
-    }
+    // vector<vector<int>> intervals(n, vector<int>(2));
+    // for(int i = 0; i < n; i++) {
+    //     cin >> intervals[i][0] >> intervals[i][1];
+    // }
+    // vector<vector<int>> result = merge_overlapping_intervals(intervals,n);
+    // for (auto it : result) {
+    //     cout << it[0] << " " << it[1] << endl;
+    // }
 
+    // int n, m;
+    // cin >> n >> m;
+    // vector<int> arr1(n), arr2(m);
+    // for(int i=0;i<n;i++) cin >> arr1[i];
+    // for(int i=0;i<m;i++) cin >> arr2[i];
+    // merge_two_sorted_arrays_without_extra_space(arr1,arr2,n,m);
+    // for(int x: arr1) cout << x << " ";
+    // cout << endl;
+    // for(int y: arr2) cout << y << " ";
 
 
 
