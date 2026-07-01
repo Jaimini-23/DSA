@@ -229,7 +229,22 @@ void count_subarray_with_xor_k(vector<int> &arr, int n, int r) {
 }
 
 
-
+vector<vector<int>> merge_overlapping_intervals(vector<vector<int>> &arr, int n) {
+    // TC: O(nlogn) + O(n) and SC: O(n)
+    if (n == 0) return {};
+    vector<vector<int>> ans;
+    sort(arr.begin(),arr.end());
+    ans.push_back(arr[0]);
+    for(int i=1;i<n;i++) {
+        if(ans.back()[1] >= arr[i][0]) {
+            ans.back()[1] = max(ans.back()[1],arr[i][1]);
+        }
+        else {
+            ans.push_back(arr[i]);
+        }
+    }
+    return ans;
+}
 
 
 
@@ -245,8 +260,8 @@ void count_subarray_with_xor_k(vector<int> &arr, int n, int r) {
 int main() {
     int n ,r;
     cin >> n >> r;
-    vector<int> arr(n);
-    for(int i=0;i<n;i++) cin >> arr[i];
+    // vector<int> arr(n);
+    // for(int i=0;i<n;i++) cin >> arr[i];
 
     // vector<vector<int>> PT = pascalTriangle(n,r);
     // for(auto row: PT) {
@@ -269,7 +284,16 @@ int main() {
     //     cout << endl;
     // }
 
-    count_subarray_with_xor_k(arr,n,r);
+    // count_subarray_with_xor_k(arr,n,r);
+
+    vector<vector<int>> intervals(n, vector<int>(2));
+    for(int i = 0; i < n; i++) {
+        cin >> intervals[i][0] >> intervals[i][1];
+    }
+    vector<vector<int>> result = merge_overlapping_intervals(intervals,n);
+    for (auto it : result) {
+        cout << it[0] << " " << it[1] << endl;
+    }
 
 
 
