@@ -253,10 +253,6 @@ vector<vector<int>> merge_overlapping_intervals(vector<vector<int>> &arr, int n)
 
 
 
-
-
-
-
 int main() {
     int n ,r;
     cin >> n >> r;
