@@ -296,14 +296,180 @@ void merge_two_sorted_arrays_without_extra_space(vector<int> &arr1, vector<int> 
 }
 
 
+void missing_repeating_number(vector<int> &arr, int n) {
+    // Brute (TC: O(n^2) and SC: O(1))
+    // int repeating = -1;
+    // int missing = -1;
+    // for(int i=1;i<=n;i++) {
+    //     int cnt = 0;
+    //     for(int j=0;j<n;j++) {
+    //         if(arr[j] == i) cnt++;
+    //     }
+    //     if(cnt == 0) missing = i;
+    //     else if(cnt == 2) repeating = i;
+
+    //     if(missing != -1 && repeating != -1) {
+    //         break;
+    //     }
+    // }
+    // cout << "Missing: " << missing << endl;
+    // cout << "Repeating: " << repeating;
+
+
+    // Better (TC: O(2n) and SC: O(n))
+    // int hash[n+1] = {0};
+    // for(int i=0;i<n;i++) {
+    //     hash[arr[i]]++;
+    // }
+    // int repeating = -1;
+    // int missing = -1;
+    // for(int i=1;i<=n;i++) {
+    //     if(hash[i] == 2) repeating = i;
+    //     else if(hash[i] == 0) missing = i;
+
+    //     if(missing != -1 && repeating != -1) {
+    //         break;
+    //     }
+    // }
+    // cout << "Missing: " << missing << endl;
+    // cout << "Repeating: " << repeating;
+
+
+    // Optimize (By Maths)
+    // TC: O(n) and SC: O(1)
+    // S - Sn   --> x - y
+    // S2 - S2n
+    // long long Sn = (n * (n+1)) / 2;
+    // long long S2n = (n * (n+1) * (2*n+1)) / 6;
+    // long long S = 0, S2 = 0;
+    // for(int i=0;i<n;i++) {
+    //     S += arr[i];
+    //     S2 += (long long)arr[i] * (long long)arr[i];
+    // }
+    // long long val1 = S - Sn;             // x - y
+    // long long val2 = S2 - S2n;        // x^2 - y^2
+    // val2 = val2 / val1;                        // x + y
+    // long long x = (val1 + val2) / 2;
+    // long long y = x - val1;
+    // cout << x << " " << y;                 // return {(int)x, (int)y};
+
+
+    // Another Optimal (XOR Method)
+    int xr = 0;
+    // XOR of array elements and numbers from 1 to n
+    for (int i = 0; i < n; i++) {
+        xr ^= arr[i];
+        xr ^= (i + 1);
+    }
+    // Find the rightmost set bit
+    int number = xr & ~(xr - 1);
+
+    int one = 0;
+    int zero = 0;
+    // Divide array elements into two groups
+    for (int i = 0; i < n; i++) {
+        if ((arr[i] & number) != 0)
+            one ^= arr[i];
+        else
+            zero ^= arr[i];
+    }
+    // Divide numbers 1...n into two groups
+    for (int i = 1; i <= n; i++) {
+        if ((i & number) != 0)
+            one ^= i;
+        else
+            zero ^= i;
+    }
+    // Find which one is repeating
+    int cnt = 0;
+    for (int x : arr) {
+        if (x == one)
+            cnt++;
+    }
+
+    if (cnt == 2)
+        cout << one << " " << zero;     // repeating, missing
+    else
+        cout << zero << " " << one;
+}
+
+
+// Merge Sort
+int merge(vector<int> &arr,int low,int mid,int high) {
+    vector<int> temp;
+    int left=low;
+    int right=mid+1;
+    int cnt = 0;
+    while(left<=mid && right<=high) {
+        if(arr[left]<=arr[right]) {
+            temp.push_back(arr[left]);
+            left++;
+        }
+        else {
+            temp.push_back(arr[right]);
+            cnt += (mid - left + 1);
+            right++;
+        }
+    }
+
+    while(left <= mid) {
+        temp.push_back(arr[left]);
+        left++;
+    }
+    while(right <= high) {
+        temp.push_back(arr[right]);
+        right++;
+    }
+
+    for(int i=low;i<=high;i++) {
+        arr[i]=temp[i-low];
+    }
+    return cnt;
+}
+int ms(vector<int> &arr, int low, int high) {
+    int cnt = 0;
+    if (low >= high) return cnt;           // can also use low == high
+    int mid = low + (high - low) / 2;    
+    cnt += ms(arr,low,mid);
+    cnt += ms(arr,mid+1,high);
+
+    cnt += merge(arr,low,mid,high);
+    return cnt;
+}
+void countInversions(vector<int> &arr, int n) {        // i > j, a[i] > a[j]
+    // Brute (TC: O(n^2) and SC: O(1))
+    // int cnt = 0;
+    // for(int i=0;i<n;i++) {
+    //     for(int j=i+1;j<n;j++) {
+    //         if(arr[i] > arr[j]) cnt++;
+    //     }
+    // }
+    // cout << cnt;
+
+    // Optimize (TC: O(nlogn) and SC: O(n))
+    cout << ms(arr,0,n-1);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 int main() {
-    // int n ,r;
-    // cin >> n >> r;
-    // vector<int> arr(n);
-    // for(int i=0;i<n;i++) cin >> arr[i];
+    int n ,r;
+    cin >> n >> r;
+    vector<int> arr(n);
+    for(int i=0;i<n;i++) cin >> arr[i];
 
     // vector<vector<int>> PT = pascalTriangle(n,r);
     // for(auto row: PT) {
@@ -347,8 +513,8 @@ int main() {
     // cout << endl;
     // for(int y: arr2) cout << y << " ";
 
-
-
+    // missing_repeating_number(arr,n);
+    countInversions(arr,n);
 
 
 
