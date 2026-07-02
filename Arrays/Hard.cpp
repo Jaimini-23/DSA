@@ -394,7 +394,7 @@ void missing_repeating_number(vector<int> &arr, int n) {
 }
 
 
-// Merge Sort
+// Merge Sort algo 
 // int merge(vector<int> &arr,int low,int mid,int high) {
 //     vector<int> temp;
 //     int left = low;
@@ -451,7 +451,7 @@ void countInversions(vector<int> &arr, int n) {        // i > j, a[i] > a[j]
 }
 
 
-// Merge Sort
+// Merge Sort algo 
 void merge(vector<int> &arr,int low,int mid,int high) {
     vector<int> temp;
     int left = low;
@@ -511,13 +511,35 @@ void reversePairs(vector<int> &arr, int n) {        // i < j, arr[i] > 2 * arr[j
 }
 
 
+void maximumProductSubarray(vector<int> &arr, int n) {
+    // Optimal (TC: O(n) and SC: O(1))
+    int ans = INT_MIN;
+    int pre = 1, suf = 1;
+    for(int i=0; i<n; i++) {
+        if(pre == 0) pre = 1;
+        if(suf == 0) suf = 1;
+        
+        pre = pre * arr[i];
+        suf = suf * arr[n - i - 1];
+        ans = max(ans, max(pre, suf));
+    }
+    cout << ans;
 
+    // Another Optimal
+    // int maxProduct(vector<int>& nums) {
+    //     int curMin = nums[0];
+    //     int curMax = nums[0];
+    //     int ans = nums[0];
+    //     for(int  i=1;i<nums.size();i++) {
+    //         if(nums[i] < 0) swap(curMin,curMax);
+    //         curMax = max(nums[i], curMax*nums[i]);
+    //         curMin = min(nums[i], curMin*nums[i]);
 
-
-
-
-
-
+    //         ans = max(ans,curMax);
+    //     }
+    //     return ans;
+    // }
+}
 
 
 
@@ -572,14 +594,12 @@ int main() {
 
     // missing_repeating_number(arr,n);
     // countInversions(arr,n);
-    reversePairs(arr,n);
-
-
-
+    // reversePairs(arr,n);
 
 
     return 0;
 }
+
 
 
 
