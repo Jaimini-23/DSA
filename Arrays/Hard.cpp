@@ -595,6 +595,7 @@ int main() {
     // missing_repeating_number(arr,n);
     // countInversions(arr,n);
     // reversePairs(arr,n);
+    maximumProductSubarray(arr,n);
 
 
     return 0;
