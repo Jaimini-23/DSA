@@ -324,6 +324,47 @@ int singleElement_in_sortedArray(vector<int> &arr, int n) {
 }
 
 
+int peakElement(vector<int> &arr, int n) {          // arr[i-1] < arr[i] > arr[i+1]
+    // hypothetical minus infinity on both ends of the array. 
+    // This ensures that even if the array is strictly increasing or decreasing, a peak will always exist
+    // Multiple Peaks: If an array contains multiple peaks, returning any one of them is acceptable
+
+    // Brute (TC: O(n) and SC: O(1))
+    // for(int i=0; i<n; i++) {
+    //     bool isGreaterLeft = (i == 0 || arr[i] > arr[i-1]);
+    //     bool isGreaterRight = (i == n-1 || arr[i+1] < arr[i]);
+    //     if(isGreaterLeft && isGreaterRight) {
+    //         return i;
+    //     }
+    // }
+    // return -1;
+
+    // Optimal (TC: O(log2_n) and SC: O(1))
+    // checking edge cases
+    if(n == 1) return 0;
+    if(arr[0] > arr[1]) return 0;
+    if(arr[n-1] > arr[n-2]) return n-1;
+
+    int low = 1;
+    int high = n-2;
+    while(low <= high) {
+        int mid = low + (high - low) / 2;
+        // If mid is a peak
+        if(arr[mid] > arr[mid - 1] && arr[mid] > arr[mid + 1]) return mid;
+        // If we are on an increasing slope, peak is to the right
+        if(arr[mid] > arr[mid - 1]) low = mid + 1;
+        // If we are on a decreasing slope, peak is to the left
+        else high = mid - 1;
+    }
+    return -1;
+}
+
+
+
+
+
+
+
 
 
 
@@ -347,7 +388,8 @@ int main() {
 
     // cout << minimum_in_rotated_sorted_array(arr,n);
     // cout << number_of_rotations_in_sorted_array(arr,n);
-    cout << singleElement_in_sortedArray(arr,n);
+    // cout << singleElement_in_sortedArray(arr,n);
+    cout << peakElement(arr,n);
 
     return 0;
 }
