@@ -221,13 +221,107 @@ int search_element_in_rotated_sorted_array_2(vector<int> &arr, int n, int r) {
 }
 
 
+int minimum_in_rotated_sorted_array(vector<int> &arr, int n) {
+    // TC: O(logn) and SC: O(1)
+    int low = 0;
+    int high = n - 1;
+    int ans = INT_MAX;
+    while(low <= high) {
+        int mid = low + (high - low) / 2;
+        // if the array is already fully sorted
+        if(arr[low] <= arr[high]) {
+            ans = min(ans,arr[low]);
+            break;
+        }
+        // if left half is sorted
+        if(arr[low] <= arr[mid]) {
+            ans = min(ans,arr[low]);
+            low = mid + 1;
+        }
+        // if right half is sorted
+        else {
+            ans = min(ans,arr[mid]);
+            high = mid - 1;
+        }
+    }
+    return ans;
+}
 
 
+int number_of_rotations_in_sorted_array(vector<int> &arr, int n) {
+    // A rotated sorted array (with unique elements) is rotated by a count exactly equal to the index of the minimum element in the array   
+    // eg. 3 4 5 1 2  -->  ans = 3
+    // TC: O(logn) and SC: O(1)
+    int low = 0;
+    int high = n - 1;
+    int ans = INT_MAX;
+    int index = -1;
+    while(low <= high) {
+        int mid = low + (high - low) / 2;
+        // if the array is already fully sorted
+        if(arr[low] <= arr[high]) {
+            if(arr[low] < ans) {
+                ans = arr[low];
+                index = low;
+            }
+            break;
+        }
+        // if left half is sorted
+        if(arr[low] <= arr[mid]) {
+            if(arr[low] < ans) {
+                ans = arr[low];
+                index = low;
+            }
+            low = mid + 1;
+        }
+        // if right half is sorted
+        else {
+           if(arr[mid] < ans) {
+                ans = arr[mid];
+                index = mid;
+           }
+            high = mid - 1;
+        }
+    }
+    return index;
+
+    // Handling Duplicates: apply the edge-case optimization from the Search in Rotated Sorted Array II pattern
+    // When arr[low] == arr[mid] == arr[high], you cannot identify the sorted half.
+    // You must trim the bounds (low++, high--) and keep a check on them before proceeding with normal binary search steps
+}
 
 
+int singleElement_in_sortedArray(vector<int> &arr, int n) {
+    // Brute Force Approach (O(n) Time)
+    // checks if an element's immediate neighbors are identical
 
+    //  The Binary Search Optimization (O(log2_n) Time)
+    // eg: 1 1 2 2 3 3 4 5 5 6 6  -->  ans = 4
+    // Left Side of Single Element: Pairs follow an (Even Index, Odd Index) pattern
+    // Right Side of Single Element: Pairs shift to an (Odd Index, Even Index) pattern
 
+    if(n == 1) return arr[0];       // edge case, if arr has only one element
+    // Edge Case: Check First and Last element manually to save boundary logic
+    if(arr[0] != arr[1]) return arr[0];
+    if(arr[n - 1] != arr[n - 2]) return arr[n - 1];
 
+    int low = 1;
+    int high = n - 2;
+    while(low <= high) {
+        int mid = low + (high - low) / 2;
+        if(arr[mid] != arr[mid - 1] && arr[mid] != arr[mid + 1])  return arr[mid];
+
+        // Are we on the left half?
+        if((mid % 2 == 1 && arr[mid] == arr[mid - 1]) 
+        || (mid % 2 == 0 && arr[mid] == arr[mid + 1])) {
+            low = mid + 1;
+        }
+        else {
+            high = mid - 1;
+        }
+    }
+    return -1;
+}
 
 
 
@@ -245,10 +339,16 @@ int main() {
     // cout << lowerBound(arr,n,r);
     // cout << upperBound(arr,n,r);
     // cout << findFloor(arr,n,r);
+
     // first_and_last_occurence_in_sorted_array(arr,n,r);
     // cout << Count_Occurrences_of_Number(arr,n,r);
     // cout << search_element_in_rotated_sorted_array(arr,n,r);
-    cout << search_element_in_rotated_sorted_array_2(arr,n,r);
+    // cout << search_element_in_rotated_sorted_array_2(arr,n,r);
+
+    // cout << minimum_in_rotated_sorted_array(arr,n);
+    // cout << number_of_rotations_in_sorted_array(arr,n);
+    cout << singleElement_in_sortedArray(arr,n);
+
     return 0;
 }
 
