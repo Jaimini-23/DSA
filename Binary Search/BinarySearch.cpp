@@ -360,10 +360,77 @@ int peakElement(vector<int> &arr, int n) {          // arr[i-1] < arr[i] > arr[i
 }
 
 
+int squareRoot(int n) {
+    // Brute (TC: O(root(n)) and SC: O(1))
+    // int ans = 1;
+    // for(long long i = 0; i <= n; i++) {
+    //     if(i * i <= n) {
+    //         ans = i;
+    //     } 
+    //     else break;
+    // }
+    // return ans;
+
+    // Optimized (TC: O(log2_n) and SC: O(1))
+    int low = 1, high = n;
+    int ans = 1;
+    while(low <= high) {
+        int mid = low + (high - low) / 2;
+        if(mid * mid <= n) {
+            ans = mid;
+            low = mid + 1;
+        }
+        else {
+            high = mid - 1;
+        }
+    }
+    return ans;
+}
 
 
+long long power(int base, int exp) {
+    int ans = 1;
+    for(int i = 1; i <= exp; i++) {
+        ans = ans * base;
+    }
+    return ans;
+}
+int checkPowerState(int mid, int n, int m) {
+    // Returns:
+    // 1 -> If mid^n == m
+    // 0 -> If mid^n < m
+    // 2 -> If mid^n > m
+    long long ans = 1;
+    for(int i=1;i<=n;i++) {
+        ans *= mid;
+        if(ans > m) return 2;           // This prevents the variable from overflowing!
+    }
+    if(ans == m) return 1;
+    return 0;
+}
+int nthRoot(int n, int m) {
+    // Brute (TC: O(m * n) and SC: O(1))
+    // for(int i = 1; i <= m; i++) {
+    //     long long val = power(i,n);
+    //     if(val == m) return i;
+    //     else if(val > m) break;
+    // }
+    // return -1;
 
-
+    // Optimized (TC: O(nlogm) and SC: O(1))
+    int low = 1;
+    int high = m;
+    while(low <= high){
+        int mid = low + (high-low)/2;
+        int state = checkPowerState(mid,n,m);
+        if(state == 1) return mid;
+        else if(state == 0)
+            low = mid + 1;
+        else
+            high = mid - 1;
+    }
+    return -1;
+}
 
 
 
@@ -389,7 +456,10 @@ int main() {
     // cout << minimum_in_rotated_sorted_array(arr,n);
     // cout << number_of_rotations_in_sorted_array(arr,n);
     // cout << singleElement_in_sortedArray(arr,n);
-    cout << peakElement(arr,n);
+    // cout << peakElement(arr,n);
+    
+    // cout << squareRoot(n);
+    cout << nthRoot(n,r);
 
     return 0;
 }
