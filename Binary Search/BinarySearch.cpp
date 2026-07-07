@@ -437,7 +437,8 @@ long long calculateTotalHours(vector<int>& piles, int speed) {
     int n = piles.size();
     long long totalHours = 0;
     for (int i = 0; i < n; i++) {
-        totalHours += (piles[i] + speed - 1) / speed;
+        totalHours += (piles[i] + speed - 1) / speed;        // or ceil((double)piles[i] / speed)
+        // normal piles[i] / speed, C++ performs integer division, which gives the floor.
     }
     return totalHours;
 }
@@ -481,7 +482,51 @@ int kokoEatingBananas(vector<int> piles,int n, int h) {
 }
 
 
+bool canMake(vector<int> &bloomday, int day, int m, int k) {
+    int n = bloomday.size();
+    int flowers = 0;
+    int bouquets = 0;
+    for(int i=0; i<n; i++) {
+        if(bloomday[i] <= day) {
+            flowers++;
+            if(flowers == k) {
+                bouquets++;
+                flowers = 0;
+            }
+        }
+        else {
+            flowers = 0;
+        }
+    }
+    return bouquets >= m;
+}
+int minDays_toMake_M_bouquets(vector<int> &bloomday, int n, int m, int k) {   // want m bouquets with k adjacent flowers
+    // brute (TC: O(n^2) and SC: O(1))
+    // if(1LL * m * k > n) return -1;
+    // int low = *min_element(bloomday.begin(),bloomday.end());
+    // int high = *max_element(bloomday.begin(),bloomday.end());
+    // for(int i=low;i<=high;i++) {
+    //     if(canMake(bloomday,i,m,k)) {
+    //         return i;
+    //     }
+    // }
+    // return -1;
 
+    // Optimized
+    if(1LL * m * k > n) return -1;
+    int low = *min_element(bloomday.begin(),bloomday.end());
+    int high = *max_element(bloomday.begin(),bloomday.end());
+    while(low <= high) {
+        int mid = low + (high - low) / 2;
+        if(canMake(bloomday,mid,m,k)) {
+            high = mid - 1;
+        }
+        else {
+            low = mid + 1;
+        }
+    }
+    return low;
+}
 
 
 
@@ -525,8 +570,10 @@ int main() {
     
     // cout << squareRoot(n);
     // cout << nthRoot(n,r);
-    cout << kokoEatingBananas(arr,n,r);
-
+    // cout << kokoEatingBananas(arr,n,r);
+    int m, k;
+    cin >> m >> k;
+    cout << minDays_toMake_M_bouquets(arr,n,m,k);
 
 
 
