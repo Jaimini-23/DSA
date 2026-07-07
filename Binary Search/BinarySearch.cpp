@@ -512,7 +512,7 @@ int minDays_toMake_M_bouquets(vector<int> &bloomday, int n, int m, int k) {   //
     // }
     // return -1;
 
-    // Optimized
+    // Optimized (TC: O(n * log(maxDay)) and SC: O(1))
     if(1LL * m * k > n) return -1;
     int low = *min_element(bloomday.begin(),bloomday.end());
     int high = *max_element(bloomday.begin(),bloomday.end());
@@ -529,20 +529,28 @@ int minDays_toMake_M_bouquets(vector<int> &bloomday, int n, int m, int k) {   //
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+int calculateSum(vector<int> &arr, int n, int divisor) {
+    int sum = 0;
+    for(int i=0;i<n;i++) {
+        sum += ceil((double)arr[i] / divisor);      // prefer this, sum += (arr[i] + divisor - 1) / divisor, more faster
+    }
+    return sum;
+}
+int smallestDivisor_given_Threshold(vector<int> &arr, int n, int threshold) {
+    // TC: O(n * log(max(arr))) and SC: O(1)
+    int low = 1;
+    int high = *max_element(arr.begin(),arr.end());
+    while(low <= high) {
+        int mid = low + (high - low) / 2;
+        if(calculateSum(arr,n,mid) <= threshold) {
+            high = mid - 1;
+        }
+        else {
+            low = mid + 1;
+        }
+    }
+    return low;
+}
 
 
 
@@ -571,10 +579,10 @@ int main() {
     // cout << squareRoot(n);
     // cout << nthRoot(n,r);
     // cout << kokoEatingBananas(arr,n,r);
-    int m, k;
-    cin >> m >> k;
-    cout << minDays_toMake_M_bouquets(arr,n,m,k);
-
+    // int m, k;
+    // cin >> m >> k;
+    // cout << minDays_toMake_M_bouquets(arr,n,m,k);
+    cout << smallestDivisor_given_Threshold(arr,n,r);
 
 
     return 0;
