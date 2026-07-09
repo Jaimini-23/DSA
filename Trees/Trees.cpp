@@ -61,16 +61,19 @@ int main() {
 
 // Traversals:
 // two main methodologies used to navigate a tree
-// 1. Depth First Search (DFS): Navigates deep into the subtrees first.
+// Depth First Search (DFS): Explores one branch completely before moving to the next branch.
 //         a. Pre-order: Root -> Left Subtree -> Right Subtree, The root is visited Pre (Before).
 //         b. In-order: Left Subtree -> Root -> Right Subtree, The root is visited In (In-between).
 //         c. Post-order: Left Subtree -> Right Subtree -> Root, The root is visited Post (After).
-// 2. Breadth First Search (BFS): Navigates broadly across the structure level by level.
+// Breadth First Search (BFS): Visits nodes level by level from left to right.
 //         Start at the root (Level 0), read it, then move down to print all nodes across the next layer (Level 1) from left to right, repeating this for each subsequent horizontal layer
 
 
 // Pre-order Traversal
-// TC: O(n) and SC: O(n) where n is total number of nodes in the binary tree.
+// TC: O(n)
+// SC: O(h), where h is the height of the tree.
+// Worst Case: O(n) (skewed tree)
+// Best/Average: O(log n) (balanced tree)
 void preorder(Node* node) { 
     if(node == NULL) return;         // Base Condition
 
@@ -96,4 +99,77 @@ void postorder(Node* node) {
     postorder(node->right);
     cout << node->data << " ";
 }
+
+// Level-order Traversal
+// TC: O(n) and SC: O(n)
+vector<vector<int>> levelOrder(Node* root) {
+    vector<vector<int>> ans;
+    if(root == NULL) return ans;
+
+    queue<Node*> q;
+    q.push(root);
+    while(!q.empty()) {
+        int size = q.size();
+        vector<int> level;
+
+        for(int i=0; i<size; i++) {
+            Node* node = q.front();
+            q.pop();
+            if(node->left != NULL) q.push(node->left);
+            if(node->right != NULL) q.push(node->right);
+
+            level.push_back(node->data);
+        }
+        ans.push_back(level);
+    }
+    return ans;
+}
+
+
+// Iterative Pre-Order
+// TC: O(n) and SC: O(n)
+vector<int> iterativePreOrder(Node* root) {
+    vector<int> preorder;
+    if(root == NULL) return preorder;
+
+    stack<Node*> st;
+    st.push(root);
+    while(!st.empty()) {
+        Node* curr = st.top();
+        st.pop();
+        preorder.push_back(curr->data);
+
+        // push right first so left is processed first
+        if(curr->right != NULL) st.push(curr->right);
+        if(curr->left != NULL) st.push(curr->left); 
+    }
+    return preorder;
+} 
+
+// Iterative In-order
+vector<int> iterativeInOrder(Node* root) {
+    vector<int> inorder;
+    stack<Node*> st;
+    Node* curr = root;
+
+    while(curr != NULL || !st.empty()) {
+        if(curr != NULL) {
+            st.push(curr);
+            curr = curr->left;          // keep moving left
+        }
+        else {
+            curr = st.top();
+            st.pop();
+            inorder.push_back(curr->data); // Process Root
+            curr = curr->right;             // turn right
+        }
+    }
+    return inorder;
+}
+
+// Iterative Post-order
+
+
+
+
 
