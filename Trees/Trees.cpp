@@ -168,8 +168,56 @@ vector<int> iterativeInOrder(Node* root) {
 }
 
 // Iterative Post-order
+vector<int> postorderTwoStacks(Node* root) {
+    vector<int> postorder;
+    if (root == NULL) return postorder;
+    stack<Node*> st1, st2;
+    st1.push(root);
+    
+    while (!st1.empty()) {
+        Node* curr = st1.top();
+        st1.pop();
+        st2.push(curr);
+        
+        if (curr->left != NULL) st1.push(curr->left);
+        if (curr->right != NULL) st1.push(curr->right);
+    }
+    while (!st2.empty()) {
+        postorder.push_back(st2.top()->data);
+        st2.pop();
+    }
+    return postorder;
+}
 
+vector<int> postorderOneStack(Node* root) {
+    vector<int> postorder;
+    if (root == NULL) return postorder;
 
+    stack<Node*> st;
+    Node* curr = root;
+    Node* lastVisited = NULL;
 
+    while (curr != NULL || !st.empty()) {
+        if (curr != NULL) {
+            st.push(curr);
+            curr = curr->left;          // keep moving left
+        }
+        else {
+            Node* temp = st.top()->right;
+
+            // If right child doesn't exist or is already visited
+            if (temp == NULL || temp == lastVisited) {
+                temp = st.top();
+                st.pop();
+                postorder.push_back(temp->data);
+                lastVisited = temp;
+            }
+            else {
+                curr = temp;            // move to right subtree
+            }
+        }
+    }
+    return postorder;
+}
 
 
