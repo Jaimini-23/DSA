@@ -221,3 +221,43 @@ vector<int> postorderOneStack(Node* root) {
 }
 
 
+// Pre In Post Order Traversal in one Traversal
+void preInPostTraversal(Node* root) {
+    if (root == NULL) return;
+
+    vector<int> pre, in, post;
+
+    // Stack to store pairs of (Node*, State)
+    stack<pair<Node*, int>> st;
+    st.push({root, 1});
+
+    while (!st.empty()) {
+        auto it = st.top();
+        Node* node = it.first;
+        int state = it.second;
+
+        // Condition 1: Preorder Phase
+        if (state == 1) {
+            pre.push_back(node->data); // Using .data here
+            st.top().second++; 
+
+            if (node->left != NULL) {
+                st.push({node->left, 1});
+            }
+        }
+        // Condition 2: Inorder Phase
+        else if (state == 2) {
+            in.push_back(node->data); // Using .data here
+            st.top().second++; 
+
+            if (node->right != NULL) {
+                st.push({node->right, 1});
+            }
+        }
+        // Condition 3: Postorder Phase
+        else {
+            post.push_back(node->data); // Using .data here
+            st.pop(); 
+        }
+    }
+}
