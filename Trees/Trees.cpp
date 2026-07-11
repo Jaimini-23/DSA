@@ -46,18 +46,6 @@ struct Node {
 
 // Initialization: When a new node is initialized using the constructor, it assigns the passed value to data, while defaulting both the left and right pointers to NULL
 
-// Creating a Tree in the main Function
-int main() {
-    // 1. Create the top-most root node
-    Node* root = new Node(1);
-    // 2. Assign and link the left child of the root
-    root->left = new Node(2);
-    // 3. Assign and link the right child of the root
-    root->right = new Node(3);
-    // 4. Further expansion (linking a child deeper in the hierarchy)
-    root->left->right = new Node(5);
-}
-
 
 // Traversals:
 // two main methodologies used to navigate a tree
@@ -261,3 +249,75 @@ void preInPostTraversal(Node* root) {
         }
     }
 }
+
+
+int maxDepth(Node* root) {
+    // TC: O(n) and SC: O(n)_worst_case_skewed_tree
+    // Base Case: If the node is NULL, its height is 0
+    if (root == NULL) {
+        return 0;
+    }
+
+    // Recursively find the height of the left and right subtrees
+    int leftHeight = maxDepth(root->left);
+    int rightHeight = maxDepth(root->right);
+
+    // The height of the current node is 1 + the maximum of its children's heights
+    return 1 + max(leftHeight, rightHeight);
+    }
+
+
+// Brute (TC: O(n^2))
+bool check_BalancedBinaryTree(Node* root) {
+    // for every node, height(left) - height(right) <= 1
+
+    if(root == NULL) return true;
+    int lh = maxDepth(root->left);
+    int rh = maxDepth(root->right);
+    if(abs(lh - rh) > 1) return false;
+
+    bool left = check_BalancedBinaryTree(root->left);
+    bool right = check_BalancedBinaryTree(root->right);
+
+    if(!left || !right) return false;
+    return true;
+}
+// Optimized (TC: O(n) and SC: O(h)/O(n)_worst)
+int isBalanced(Node* root) {
+    // Returns height if balanced, else -1
+    if(root == NULL) return 0;
+
+    int lh = isBalanced(root->left);
+    if(lh == -1) return -1;
+
+    int rh = isBalanced(root->right);
+    if(rh == -1) return -1;
+
+    if(abs(lh - rh) > 1) return -1;
+
+    return 1 + max(lh, rh);
+}
+bool isBalancedBinaryTree(Node* root) {
+    return isBalanced(root) != -1;
+}
+
+
+
+
+
+    
+int main() {
+    // Creating a Tree in the main Function
+    // 1. Create the top-most root node
+    Node* root = new Node(1);
+    // 2. Assign and link the left child of the root
+    root->left = new Node(2);
+    // 3. Assign and link the right child of the root
+    root->right = new Node(3);
+    // 4. Further expansion (linking a child deeper in the hierarchy)
+    root->left->right = new Node(5);
+}
+
+
+
+
