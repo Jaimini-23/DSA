@@ -267,6 +267,8 @@ int maxDepth(Node* root) {
     }
 
 
+
+
 // Brute (TC: O(n^2))
 bool check_BalancedBinaryTree(Node* root) {
     // for every node, height(left) - height(right) <= 1
@@ -282,6 +284,7 @@ bool check_BalancedBinaryTree(Node* root) {
     if(!left || !right) return false;
     return true;
 }
+
 // Optimized (TC: O(n) and SC: O(h)/O(n)_worst)
 int isBalanced(Node* root) {
     // Returns height if balanced, else -1
@@ -300,6 +303,42 @@ int isBalanced(Node* root) {
 bool isBalancedBinaryTree(Node* root) {
     return isBalanced(root) != -1;
 }
+
+
+
+// Brute (TC: O(n^2))
+void diameter(Node* root, int &maxi) {
+    // longest distance between two nodes
+    if(root == NULL) return;
+
+    int lh = maxDepth(root->left);
+    int rh = maxDepth(root->right);
+
+    maxi = max(maxi, lh + rh);
+    diameter(root->left, maxi);
+    diameter(root->right, maxi);
+}
+
+// Optimized (TC: O(n) and SC: O(h)/O(n)_worst)
+int findDiameter(Node* root, int &maxi) {
+    if(root == NULL) return 0;
+
+    int lh = findDiameter(root->left, maxi);
+    int rh = findDiameter(root->right, maxi);
+    maxi = max(maxi, lh + rh);
+
+    return 1 + max(lh, rh);
+}
+int whatsDiameter(Node* root) {
+    int maxi = 0;
+    // diameter(root, maxi);
+    findDiameter(root, maxi);
+    return maxi;
+}
+
+
+
+
 
 
 
