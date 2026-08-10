@@ -31,7 +31,7 @@ int leastWeightCapacity(vector<int> &weight, int n, int days) {
 }
 
 
-int kthMissingNumber(vector<int> arr, int n, int k) {
+int kthMissingNumber(vector<int> &arr, int n, int k) {
     // Brute (TC: O(n) and SC: O(1)) 
     // for(int i=0; i<n; i++) {
     //     if(arr[i] <= k) k++;
@@ -52,7 +52,32 @@ int kthMissingNumber(vector<int> arr, int n, int k) {
 }
 
 
-
+bool canWePlace(vector<int> &arr, int dist, int cows) {
+    int cntCows = 1, last = arr[0];
+    for(int i = 1; i < arr.size(); i++) {
+        if(arr[i] - last >= dist) {
+            cntCows++;
+            last = arr[i];
+        }
+        if(cntCows >= cows) return true;
+    }
+    return false;
+}
+int aggressiveCows(vector<int> &arr, int n, int k) {        // (minmum distance between cows) is maximum
+    // optimized (TC: O(n log n + n log(maxDistance))) and SC: O(1))
+    sort(arr.begin(),arr.end());
+    int low = 1, high = arr[n - 1] - arr[0];
+    while(low <= high) {
+        int mid = (low + high) / 2;
+        if(canWePlace(arr, mid, k) == true) {
+            low = mid + 1;
+        }
+        else {
+            high = mid - 1;
+        }
+    }
+    return high;
+}
 
 
 
