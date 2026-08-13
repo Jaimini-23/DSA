@@ -19,7 +19,7 @@ void bubble_sort(int arr[],int n) {
     // push the max to the last by adjacent swaps
     for(int i=0;i<n;i++) {
         int didswap=0;
-        for(int j=0;j<n-i;j++) {         // n-i because no need check the last elements, as they are getting sorted as i increases
+        for(int j=0;j<n-i-1;j++) {         // n-i because no need check the last elements, as they are getting sorted as i increases
             if(arr[j+1]<arr[j]) {
                 swap(arr[j+1],arr[j]);
                 didswap=1;

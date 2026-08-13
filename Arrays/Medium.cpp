@@ -269,30 +269,30 @@ vector<int> rearrange_alternative_by_sign(vector<int> &arr, int n) {         // 
 
 
 vector<int> nextPermutation(vector<int> &arr, int n) {
-    // In c++, we can use STL ( next_permutation() and prev_permutation() )
+    // In c++, we can use STL (next_permutation() and prev_permutation()) 
     // Optimize (TC: O(3n) and SC: O(1))
-    int ind = -1;              // pivot = 1
+    int pivot = -1;              // pivot = 1
     for(int i=n-2;i>=0;i--) {        // checking each pair is in asscending or not 
         if(arr[i] < arr[i+1]) {
-            ind = i;                  // if in asscending, assign ind (pivot) as i
+            pivot = i;                  // if in asscending, assign ind (pivot) as i
             break;
         }
     }
 
-    if(ind == -1) {                // this mean provided array is in descending order
+    if(pivot == -1) {                // this mean provided array is in descending order
         reverse(arr.begin(),arr.end());      // reverse and give its smallest as next permutation
         return arr;
     }
 
 
-    for(int i=n-1;i>ind;i--) {              // to get the next highest/next permutation
-        if(arr[i] > arr[ind]) {
-            swap(arr[i],arr[ind]);
+    for(int i=n-1;i>pivot;i--) {              // to get the next highest/next permutation
+        if(arr[i] > arr[pivot]) {
+            swap(arr[i],arr[pivot]);
             break;
         }
     }
 
-    reverse(arr.begin() + ind + 1, arr.end());        // at ahead of pivot, we reverse the numbers so that we can get the just next higher number/next permutation
+    reverse(arr.begin() + pivot + 1, arr.end());        // at ahead of pivot, we reverse the numbers so that we can get the just next higher number/next permutation
     return arr;
 }
 

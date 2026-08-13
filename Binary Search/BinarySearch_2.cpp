@@ -80,7 +80,33 @@ int aggressiveCows(vector<int> &arr, int n, int k) {        // (minmum distance 
 }
 
 
-
+int cntStudents(vector<int> &arr, int pages) {
+    int students = 1;
+    long long pagesStudents = 0;
+    for(int i=0; i<arr.size(); i++) {
+        if(pagesStudents + arr[i] <= pages) {
+            pagesStudents += arr[i];
+        }
+        else {
+            students++;
+            pagesStudents = arr[i];
+        }
+    }
+    return students;
+}
+int allocateBooks(vector<int> &arr, int n, int k) {             // maximum no of pages assigned to a student is minimum
+    // TC: O(n logn(sum of pages)) SC: O(1)
+    if(k > n) return -1;  // student more and books less
+    int low = *max_element(arr.begin(),arr.end());
+    int high = accumulate(arr.begin(),arr.end(),0);
+    while(low <= high) {
+        int mid = low + (high - low) / 2;
+        int students = cntStudents(arr,mid);
+        if(students > k) low = mid + 1;
+        else high = mid - 1;
+    }
+    return low;
+}
 
 
 
