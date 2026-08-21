@@ -209,7 +209,7 @@ int lowerBound(vector<int> &arr, int n, int x) {
     }
     return ans;
 }
-int row_with_max_1(vector<vector<int>> &arr, int n, int m) {
+int row_with_max_1(vector<vector<int>> &arr, int n, int m) {          // if rows are sorted
     int cntMax = 0;
     int index = -1;
     for(int i=0; i<n; i++) {
@@ -223,7 +223,20 @@ int row_with_max_1(vector<vector<int>> &arr, int n, int m) {
 }
 
 
-
+bool searchMatrix(vector<vector<int>> &arr, int k) {   // if 2D matrix is sorted
+    int n = arr.size();
+    int m = arr[0].size();
+    int low = 0, high = n * m - 1;
+    while(low <= high) {
+        int mid = low + (high - low) / 2;
+        int row = mid / m;
+        int col = mid % m;
+        if(arr[row][col] == k) return true;
+        else if(arr[row][col] < k) low = mid + 1;
+        else high = mid - 1;
+    }
+    return false;
+}
 
 
 
