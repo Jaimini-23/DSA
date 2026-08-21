@@ -224,6 +224,7 @@ int row_with_max_1(vector<vector<int>> &arr, int n, int m) {          // if rows
 
 
 bool searchMatrix(vector<vector<int>> &arr, int k) {   // if 2D matrix is sorted
+    // TC: O(log(n * m)) and SC: O(1)
     int n = arr.size();
     int m = arr[0].size();
     int low = 0, high = n * m - 1;
@@ -239,7 +240,18 @@ bool searchMatrix(vector<vector<int>> &arr, int k) {   // if 2D matrix is sorted
 }
 
 
-
+bool searchElement(vector<vector<int>> &arr, int k) {      // when each row and each column id sorted but not fully array is sorted
+    // TC: O(n + m) and SC: O(1)
+    int n = arr.size();
+    int m = arr[0].size();
+    int row = 0, col = m - 1;
+    while(row < n && col >= 0) {
+        if(arr[row][col] == k) return true;
+        else if(arr[row][col] < k) row++;
+        else col--;
+    }
+    return false;
+}
 
 
 
