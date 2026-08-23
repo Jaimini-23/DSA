@@ -3,6 +3,9 @@ using namespace std;
 
 // A linked list is a linear data structure in which elements (called nodes) are stored in separate memory locations and connected using pointers.
 // size is not defined and elements are not in contigounous memory location. Linked List = Dynamic size + Non-contiguous memory + Pointers connecting nodes.
+// Never unnecessarily modify/tamper with the head. Instead, use a temporary pointer for traversal.
+// Given a linked list usually means you are given its head.
+
 
 class Node {
     public:
@@ -35,6 +38,15 @@ Node* convertArr2LL(vector<int> &arr) {
 }
 
 
+void Traversal(Node* head) {
+    Node* temp = head;
+    while(temp) {
+        cout << temp->data << " ";
+        temp = temp->next;
+    }
+}
+
+
 int lengthOfLL(Node* head) {
     int len = 0;
     Node* temp = head;
@@ -57,10 +69,25 @@ int checkIfPresent(Node* head, int val) {
 }
 
 
+Node* removesHead(Node* head) {
+    if(head == NULL) return head;
+    Node* temp = head;
+    head = head->next;
+    delete temp;        // or free(temp)
+    return head;
+}
 
 
-
-
+Node* removesTail(Node* head) {
+    if(head == NULL || head->next == NULL) return NULL;
+    Node* temp = head;
+    while(temp->next->next != NULL) {
+        temp = temp->next;
+    }
+    free(temp->next);
+    temp->next = nullptr;
+    return head;
+}
 
 
 
@@ -68,10 +95,14 @@ int checkIfPresent(Node* head, int val) {
 
 
 int main() {
-    vector<int> arr = {12,33,44,15,58};
+    vector<int> arr = {12,33,44,15,58,87,89,23};
     Node* head = convertArr2LL(arr);
     // cout << endl << lengthOfLL(head);
     // cout << checkIfPresent(head,33);
+
+    // cout << removesHead(head)->data;
+    head = removesTail(head);
+    Traversal(head);
 }
 
 
