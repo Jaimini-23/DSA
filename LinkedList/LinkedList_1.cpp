@@ -47,10 +47,13 @@ int lengthOfLL(Node* head) {
 }
 
 
-int main() {
-    vector<int> arr = {12,33,44,15,58};
-    Node* head = convertArr2LL(arr);
-    cout << endl << lengthOfLL(head);
+int checkIfPresent(Node* head, int val) {
+    Node* temp = head;
+    while(temp) {
+        if(temp->data == val) return 1;
+        temp = temp->next;
+    }
+    return 0;
 }
 
 
@@ -59,6 +62,17 @@ int main() {
 
 
 
+
+
+
+
+
+int main() {
+    vector<int> arr = {12,33,44,15,58};
+    Node* head = convertArr2LL(arr);
+    // cout << endl << lengthOfLL(head);
+    // cout << checkIfPresent(head,33);
+}
 
 
 
