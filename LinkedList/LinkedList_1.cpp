@@ -140,6 +140,24 @@ Node* removesElement(Node* head, int el) {
 }
 
 
+Node* insertHead(Node* head, int val) {
+    return new Node(val,head);
+} 
+
+
+Node* insertTail(Node* head, int val) {
+    if(head == NULL) return new Node(val);
+    Node* temp = head;
+    while(temp->next != NULL) {
+        temp = temp->next;
+    }
+
+    temp->next = new Node(val);       // temp->next = new Node(val,temp->next);
+    return head;
+} 
+
+
+
 
 int main() {
     vector<int> arr = {12,33,44,15,58,87,89,23};
@@ -150,7 +168,11 @@ int main() {
     // cout << removesHead(head)->data;
     // head = removesTail(head);
     // head = removesPosition(head,3);
-    head = removesElement(head,87);
+    // head = removesElement(head,87);
+    // Traversal(head);
+
+    // head = insertHead(head,03);
+    head = insertTail(head,99);
     Traversal(head);
 }
 
