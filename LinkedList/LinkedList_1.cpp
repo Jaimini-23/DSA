@@ -103,6 +103,7 @@ Node* removesPosition(Node* head, int pos) {
     Node* temp = head;
     Node* prev = NULL;
     while(temp != NULL) {
+        // cnt++       for 1 based indexing
         if(cnt == pos) {
             prev->next = prev->next->next;        // or prev->next = temp->next
             free(temp);
@@ -110,7 +111,7 @@ Node* removesPosition(Node* head, int pos) {
         }
         prev = temp;
         temp = temp->next;
-        cnt++;
+        cnt++;          // for zero based indexing
     }
     return head;
 }
@@ -157,6 +158,30 @@ Node* insertTail(Node* head, int val) {
 } 
 
 
+Node* insertPosition(Node* head, int pos, int el) {
+    if(head == NULL) {
+        if(pos == 1) return new Node(el);
+        else return head;
+    }
+    if(pos == 1) {
+        return new Node(el,head);
+    }
+
+    int cnt = 0;
+    Node* temp = head;
+    while(temp != NULL) {
+        cnt++;
+        if(cnt == pos - 1) {
+            Node* x = new Node(el, temp->next);
+            temp->next = x;
+            break;
+        }
+        temp = temp->next;
+    }
+    return head;
+}
+
+
 
 
 int main() {
@@ -172,8 +197,9 @@ int main() {
     // Traversal(head);
 
     // head = insertHead(head,03);
-    head = insertTail(head,99);
-    Traversal(head);
+    // head = insertTail(head,99);
+    // head = insertPosition(head,1,45);
+    // Traversal(head);
 }
 
 
