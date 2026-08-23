@@ -90,7 +90,54 @@ Node* removesTail(Node* head) {
 }
 
 
+Node* removesPosition(Node* head, int pos) {
+    if(head == NULL) return head;
+    if(pos == 0) {            // remove head
+        Node* temp = head;
+        head = head->next;
+        free(temp);
+        return head;
+    }
 
+    int cnt = 0;
+    Node* temp = head;
+    Node* prev = NULL;
+    while(temp != NULL) {
+        if(cnt == pos) {
+            prev->next = prev->next->next;        // or prev->next = temp->next
+            free(temp);
+            break;
+        }
+        prev = temp;
+        temp = temp->next;
+        cnt++;
+    }
+    return head;
+}
+
+
+Node* removesElement(Node* head, int el) {
+    if(head == NULL) return head;
+    if(head->data == el) {            // remove head
+        Node* temp = head;
+        head = head->next;
+        free(temp);
+        return head;
+    }
+
+    Node* temp = head;
+    Node* prev = NULL;
+    while(temp != NULL) {
+        if(temp->data == el) {
+            prev->next = prev->next->next;        // or prev->next = temp->next
+            free(temp);
+            break;
+        }
+        prev = temp;
+        temp = temp->next;
+    }
+    return head;
+}
 
 
 
@@ -101,7 +148,9 @@ int main() {
     // cout << checkIfPresent(head,33);
 
     // cout << removesHead(head)->data;
-    head = removesTail(head);
+    // head = removesTail(head);
+    // head = removesPosition(head,3);
+    head = removesElement(head,87);
     Traversal(head);
 }
 
