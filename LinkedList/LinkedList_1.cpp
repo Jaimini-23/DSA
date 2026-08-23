@@ -40,10 +40,14 @@ Node* convertArr2LL(vector<int> &arr) {
 
 int main() {
     vector<int> arr = {12,3,4,5};
-    // Node *y = new Node(arr[0],nullptr);
     Node* head = convertArr2LL(arr);
-    cout << head->data;
-    //cout << y -> next;
+    // cout << head->data;
+
+    Node* temp = head;
+    while(temp) {
+        cout << temp->data << " ";
+        temp = temp->next;
+    }
 }
 
 
