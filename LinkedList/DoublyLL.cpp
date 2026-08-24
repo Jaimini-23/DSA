@@ -114,26 +114,33 @@ Node* deletePosition(Node* head, int k) {
 }
 
 
+void deleteElement(Node* temp) {         // cannot pass head
+    Node* prev = temp->back;
+    Node* front = temp->next;
+
+    if(front == NULL) {
+        prev->next = nullptr;
+        temp->back = nullptr;
+        free(temp);
+        return;
+    }
+    prev->next = front;
+    front->back = prev;
+    temp->next = temp->back = nullptr;
+    free(temp);
+}
+
 
 int main() {
     vector<int> arr = {12,33,44,15,58,87,89,23};
     Node* head = convertArr2DLL(arr);
     // head = deleteHead(head);
     // head = deleteTail(head);
-    head = deletePosition(head,4);
-    Traversal(head);
+    // head = deletePosition(head,4);
+    // deleteElement(head->next->next);
+    // Traversal(head);
     return 0;
 }
-
-
-
-
-
-
-
-
-
-
 
 
 
