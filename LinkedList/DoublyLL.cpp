@@ -131,6 +131,48 @@ void deleteElement(Node* temp) {         // cannot pass head
 }
 
 
+Node* insertBeforeHead(Node* head, int val) {
+    Node* newHead = new Node(val,head,nullptr);
+    head->back = newHead;
+    return newHead;
+}
+
+
+Node* insertBeforeTail(Node* head, int val) {
+    if(head->next == NULL) return insertBeforeHead(head,val);
+    Node* tail = head;
+    while(tail->next != NULL) {
+        tail = tail->next;
+    }
+    Node* prev = tail->back;
+    Node* newNode = new Node(val,tail,prev);
+    prev->next = newNode;
+    tail->back = newNode;
+    return head;
+}
+
+
+Node* insertBeforePosition(Node* head, int val, int pos) {
+    if(pos == 1) {
+        return insertBeforeHead(head,val);
+    }
+    Node* temp = head;
+    int cnt = 0;
+    while(temp != NULL) {
+        cnt++;
+        if(cnt == pos) break;
+        temp = temp->next;
+    }
+    Node* prev = temp->back;
+    Node* newNode = new Node(val,temp,prev);
+
+    prev->next = newNode;
+    temp->back = newNode;
+    return head;
+}
+
+
+
 int main() {
     vector<int> arr = {12,33,44,15,58,87,89,23};
     Node* head = convertArr2DLL(arr);
@@ -139,6 +181,11 @@ int main() {
     // head = deletePosition(head,4);
     // deleteElement(head->next->next);
     // Traversal(head);
+
+    // head = insertBeforeHead(head,10);
+    // head = insertBeforeTail(head,10);
+    head = insertBeforePosition(head,10,5);
+    Traversal(head);
     return 0;
 }
 
