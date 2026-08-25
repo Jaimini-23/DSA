@@ -172,6 +172,15 @@ Node* insertBeforePosition(Node* head, int val, int pos) {
 }
 
 
+Node* insertBeforeElement(Node* node, int val) {
+    Node* prev = node->back;
+    Node* newNode = new Node(val,node,prev);
+    prev->next = newNode;
+    node->back = newNode;
+}
+
+
+
 
 int main() {
     vector<int> arr = {12,33,44,15,58,87,89,23};
@@ -184,7 +193,8 @@ int main() {
 
     // head = insertBeforeHead(head,10);
     // head = insertBeforeTail(head,10);
-    head = insertBeforePosition(head,10,5);
+    //head = insertBeforePosition(head,10,5);
+    insertBeforeElement(head->next->next,10);
     Traversal(head);
     return 0;
 }
