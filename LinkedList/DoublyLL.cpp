@@ -180,6 +180,32 @@ Node* insertBeforeElement(Node* node, int val) {
 }
 
 
+Node* reverseLL(Node* head) {
+    // TC: O(2n) and SC: O(n)
+    stack<int> st;
+    Node* temp = head;
+    while(temp != NULL) {
+        st.push(temp->data);
+        temp = temp->next;
+    }
+
+    temp = head;
+    while(temp != NULL) {
+        temp->data = st.top();
+        st.pop();
+        temp = temp->next;
+    }
+    return head;
+}
+
+
+
+
+
+
+
+
+
 
 
 int main() {
@@ -194,7 +220,10 @@ int main() {
     // head = insertBeforeHead(head,10);
     // head = insertBeforeTail(head,10);
     //head = insertBeforePosition(head,10,5);
-    insertBeforeElement(head->next->next,10);
+    // insertBeforeElement(head->next->next,10);
+    // Traversal(head);
+
+    // head = reverseLL(head);
     Traversal(head);
     return 0;
 }

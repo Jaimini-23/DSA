@@ -436,7 +436,7 @@ void missing_repeating_number(vector<int> &arr, int n) {
 //     cnt += merge(arr,low,mid,high);
 //     return cnt;
 // }
-void countInversions(vector<int> &arr, int n) {        // i > j, a[i] > a[j]
+void countInversions(vector<int> &arr, int n) {        // i < j, a[i] > a[j]
     // Brute (TC: O(n^2) and SC: O(1))
     // int cnt = 0;
     // for(int i=0;i<n;i++) {

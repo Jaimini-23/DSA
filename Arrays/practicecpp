@@ -1,0 +1,124 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+vector<vector<int>> Threesum(vector<int> &arr) {
+    int n = arr.size();
+    sort(arr.begin(),arr.end());
+    vector<vector<int>> ans;
+    for(int i=0; i<n; i++) {
+        if(i>0 && arr[i] == arr[i-1]) continue;
+        int j = i + 1;
+        int k = n - 1;
+        while(j < k) {
+            long long sum = arr[i] + arr[j] + arr[k];
+            if(sum < 0) j++;
+            else if(sum > 0) k--;
+            else {
+                vector<int> temp = {arr[i], arr[j], arr[k]};
+                ans.push_back(temp);
+                k--;
+                j++;
+                while(j < k && arr[j] == arr[j-1]) j++;
+                while(j < k && arr[k] == arr[k + 1]) k--;
+            }
+
+        }
+
+    }
+    return ans;
+}
+
+
+vector<vector<int>> FourSum(vector<int> &arr) {
+    int n = arr.size();
+    sort(arr.begin(),arr.end());
+    vector<vector<int>> ans;
+    for(int i=0; i<n; i++) {
+        if(i > 0 && arr[i] == arr[i - 1]) continue;
+        for(int j = i + 1; j < n; j++) {
+            if(j != i + 1 && arr[j] == arr[j-1]) continue;
+            int k = j  + 1;
+            int l = n - 1;
+            while(k < l) {
+                long long sum = arr[i] + arr[j];
+                sum += arr[k] + arr[l];
+                if(sum > 0) l--;
+                else if(sum < 0) k++;
+                else {
+                    vector<int> temp = {arr[i], arr[j], arr[k], arr[l]};
+                    ans.push_back(temp);
+                    k++;
+                    l--;
+                    while(k < l && arr[k] == arr[k - 1]) k++;
+                    while(k < l && arr[l] == arr[l + 1]) l--;
+                }
+            }
+        }
+    }
+    return ans;
+}
+
+void merge(vector<int> &arr, int low, int mid, int high) {
+    int left = low;
+    int right = mid + 1;
+    vector<int> temp;
+    while(left <= mid && right <= high) {
+        if(arr[left] <= arr[right]) {
+            temp.push_back(arr[left]);
+            left++;
+        }
+        else {
+            temp.push_back(arr[right]);
+            right++;
+        }
+    }
+    while(left <= mid) {
+        temp.push_back(arr[left]);
+        left++;
+    }
+    while(right <= high) {
+        temp.push_back(arr[right]);
+        right++;
+    }
+
+    for(int i=low; i<=high; i++) {
+        arr[i] = temp[i - low];
+    }
+}
+void ms(vector<int> &arr, int low, int high) {
+    if(low >= high) return;
+    int mid = low + (high - low) / 2;
+    ms(arr,low,mid);
+    ms(arr,mid+ 1,high);
+
+    merge(arr,low,mid,high);
+}
+
+
+int partition(vector<int> &arr, int low, int high) {
+    int pivot = arr[low];
+    int i = low;
+    int j = high;
+    while(i < j) {
+        while(arr[i] <= pivot && i <= high) {
+            i++;
+        }
+        while(arr[j] >= pivot && j >= low) {
+            j--;
+        }
+        if(i < j) swap(arr[i],arr[j]);
+    }
+    swap(arr[j],arr[low]);
+    return j;
+}
+void qs(vector<int> &arr, int low, int high) {
+    if(low >= high) return;
+    int pIndex = partition(arr,low,high);
+    qs(arr,low,pIndex-1);
+    qs(arr,pIndex+1,high);
+}
+
+
+int main() {
+
+}
