@@ -203,6 +203,38 @@ Node* insertBeforeValue(Node* head, int val, int el) {
 }
 
 
+Node* reverseLL(Node* head) {
+    // TC: O(2n) and SC: O(n)
+    // stack<int> st;
+    // Node* temp = head;
+    // while(temp != NULL) {
+    //     st.push(temp->data);
+    //     temp = temp->next;
+    // }
+
+    // temp = head;
+    // while(temp != NULL) {
+    //     temp->data = st.top();
+    //     st.pop();
+    //     temp = temp->next;
+    // }
+    // return head;
+
+    // Optimal
+    // TC: O(n) and SC: O(1)
+    Node* current = head;
+    Node* prev = NULL;
+    while(current != NULL) {
+        Node* next = current->next;
+        current->next = prev;
+        prev = current;
+        current = next;
+    }
+    return prev;
+}
+
+
+
 
 
 int main() {
@@ -223,6 +255,8 @@ int main() {
     // head = insertBeforeValue(head,44,29);
     // Traversal(head);
     
+    head = reverseLL(head);
+    Traversal(head);
     return 0;
 }
 
