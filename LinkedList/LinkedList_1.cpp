@@ -295,6 +295,9 @@ vector<vector<int>> oddEvenLL(Node* head) {
 
 
 Node* oddEvenLL2(Node* head) {
+    if(head == NULL || head->next == NULL)
+        return head;
+
     Node* odd = head;
     Node* even = head->next;
     Node* evenHead = head->next;
@@ -310,10 +313,55 @@ Node* oddEvenLL2(Node* head) {
 }
 
 
+Node* sort012(Node* head) {
+    if (head == NULL || head->next == NULL) return head;
+
+    // Dummy nodes
+    Node* zeroHead = new Node(-1);
+    Node* oneHead = new Node(-1);
+    Node* twoHead = new Node(-1);
+
+    // Tail pointers
+    Node* zeroTail = zeroHead;
+    Node* oneTail = oneHead;
+    Node* twoTail = twoHead;
+
+    Node* temp = head;
+    while (temp != NULL) {
+        if (temp->data == 0) {
+            zeroTail->next = temp;
+            zeroTail = zeroTail->next;
+        } else if (temp->data == 1) {
+            oneTail->next = temp;
+            oneTail = oneTail->next;
+        } else {
+            twoTail->next = temp;
+            twoTail = twoTail->next;
+        }
+        temp = temp->next;
+    }
+
+    // 1. Connect 0-tail to 1-list (or 2-list if 1-list is empty)
+    zeroTail->next = (oneHead->next != NULL) ? oneHead->next : twoHead->next;
+    // 2. Connect 1-tail to 2-list
+    oneTail->next = twoHead->next;
+    // 3. Terminate 2-tail
+    twoTail->next = NULL;
+    // Save actual head before deleting dummy nodes
+    Node* newHead = zeroHead->next;
+
+    // Safely delete original dummy nodes
+    delete zeroHead;
+    delete oneHead;
+    delete twoHead;
+
+    return newHead;
+}
+
 
 
 int main() {
-    vector<int> arr = {12,33,44,15,58,87,89,23,77};
+    vector<int> arr = {1,2,0,0,0,1,2,2,1,0,1,1,1,1,2};
     Node* head = convertArr2LL(arr);
     // cout << endl << lengthOfLL(head);
     // cout << checkIfPresent(head,33);
@@ -346,7 +394,8 @@ int main() {
     //     cout << endl;
     // }
 
-    head = oddEvenLL2(head);
+    // head = oddEvenLL2(head);
+    head = sort012(head);
     Traversal(head);
     return 0;
 }
