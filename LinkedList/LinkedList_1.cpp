@@ -235,7 +235,7 @@ Node* reverseLL(Node* head) {
 
 
 // Concept of Dummy Node
-Node* additionLL(Node* head1, Node* head2) {
+Node* addTwoNumbers(Node* head1, Node* head2) {
     // TC: O(max(n,m)) and SC: O(max(n,m))
     Node* dummyHead = new Node(-1);
     Node* t1 = head1;
@@ -265,10 +265,55 @@ Node* additionLL(Node* head1, Node* head2) {
 }
 
 
+vector<vector<int>> oddEvenLL(Node* head) {
+    // TC: O(2n) and SC: O(n)
+    vector<vector<int>> ans;
+    Node* temp = head;
+    vector<int> arrOdd;
+    while(temp != NULL && temp->next != NULL) {       // because if temp->next is null then temp->next->next is undefined;
+        arrOdd.push_back(temp->data);
+        temp = temp->next->next;
+    }
+    if(temp) {                 // if temp is the last element
+        arrOdd.push_back(temp->data);
+    }
+    ans.push_back(arrOdd);
+
+    // for even
+    temp = head->next;
+    vector<int> arrEven;
+    while(temp != NULL && temp->next != NULL) {
+        arrEven.push_back(temp->data);
+        temp = temp->next->next;
+    }
+    if(temp) {
+        arrEven.push_back(temp->data);
+    }
+    ans.push_back(arrEven);
+    return ans;
+}
+
+
+Node* oddEvenLL2(Node* head) {
+    Node* odd = head;
+    Node* even = head->next;
+    Node* evenHead = head->next;
+    while(even != NULL && even->next != NULL) {
+        odd->next = odd->next->next;
+        odd = odd->next;
+
+        even->next = odd->next;
+        even = even->next;
+    }
+    odd->next = evenHead;      // connecting odd tail to even head
+    return head;
+}
+
+
 
 
 int main() {
-    vector<int> arr = {12,33,44,15,58,87,89,23};
+    vector<int> arr = {12,33,44,15,58,87,89,23,77};
     Node* head = convertArr2LL(arr);
     // cout << endl << lengthOfLL(head);
     // cout << checkIfPresent(head,33);
@@ -286,11 +331,22 @@ int main() {
     // Traversal(head);
     
     // head = reverseLL(head);
-    vector<int> arr1 = {1,2,8};
-    vector<int> arr2 = {7,7,7};
-    Node* head1 = convertArr2LL(arr1);
-    Node* head2 = convertArr2LL(arr2);
-    head = additionLL(head1,head2);
+    // vector<int> arr1 = {1,2,8};
+    // vector<int> arr2 = {7,7,7};
+    // Node* head1 = convertArr2LL(arr1);
+    // Node* head2 = convertArr2LL(arr2);
+    // head = addTwoNumbers(head1,head2);
+    // Traversal(head);
+
+    // vector<vector<int>> result = oddEvenLL(head);
+    // for(auto it : result) {
+    //     for(auto x : it) {
+    //         cout << x << " ";
+    //     }
+    //     cout << endl;
+    // }
+
+    head = oddEvenLL2(head);
     Traversal(head);
     return 0;
 }
