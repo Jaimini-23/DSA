@@ -234,6 +234,16 @@ Node* reverseLL(Node* head) {
 }
 
 
+Node* reverseByRecursion(Node* head) {
+    if(head == NULL || head->next == NULL) return head;
+    Node* newHead = reverseByRecursion(head->next);
+    Node* front = head->next;
+    front->next = head;
+    head->next = NULL;
+    return newHead;
+}
+
+
 // Concept of Dummy Node
 Node* addTwoNumbers(Node* head1, Node* head2) {
     // TC: O(max(n,m)) and SC: O(max(n,m))
@@ -397,6 +407,7 @@ int main() {
     // Traversal(head);
     
     // head = reverseLL(head);
+    // head = reverseByRecursion(head);
     // vector<int> arr1 = {1,2,8};
     // vector<int> arr2 = {7,7,7};
     // Node* head1 = convertArr2LL(arr1);
@@ -414,7 +425,7 @@ int main() {
 
     // head = oddEvenLL2(head);
     // head = sort012(head);
-    head = remove_KthNode_fromEnd(head,4);
+    // head = remove_KthNode_fromEnd(head,4);
     Traversal(head);
     return 0;
 }
