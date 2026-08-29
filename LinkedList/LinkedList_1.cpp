@@ -359,9 +359,27 @@ Node* sort012(Node* head) {
 }
 
 
+Node* remove_KthNode_fromEnd(Node* head, int k) {
+    // TC: O(n) and SC: O(1)
+    Node* fast = head;
+    for(int i=0; i<k; i++) fast = fast->next;
+    if(fast == NULL) return head->next;
+    Node* slow = head;
+    while(fast->next != NULL) {
+        fast = fast->next;
+        slow = slow->next;
+    }
+    Node* delNode = slow->next;
+    slow->next = slow->next->next;
+    delete delNode;
+    return head;
+}
+
+
+
 
 int main() {
-    vector<int> arr = {1,2,0,0,0,1,2,2,1,0,1,1,1,1,2};
+    vector<int> arr = {12,74,87,58,69,56,95,15,65,23};
     Node* head = convertArr2LL(arr);
     // cout << endl << lengthOfLL(head);
     // cout << checkIfPresent(head,33);
@@ -395,7 +413,8 @@ int main() {
     // }
 
     // head = oddEvenLL2(head);
-    head = sort012(head);
+    // head = sort012(head);
+    head = remove_KthNode_fromEnd(head,4);
     Traversal(head);
     return 0;
 }
