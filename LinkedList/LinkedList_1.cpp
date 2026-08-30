@@ -235,6 +235,7 @@ Node* reverseLL(Node* head) {
 
 
 Node* reverseByRecursion(Node* head) {
+    // Tc: O(n) and SC: O(n)_recursive_stack_spaces
     if(head == NULL || head->next == NULL) return head;
     Node* newHead = reverseByRecursion(head->next);
     Node* front = head->next;
@@ -386,6 +387,47 @@ Node* remove_KthNode_fromEnd(Node* head, int k) {
 }
 
 
+bool isPalindrome(Node* head) {
+    // Tc: O(2n) and SC: O(n)
+    // if(head == NULL || head->next == NULL) return 1;
+    // stack<int> st;
+    // Node* temp = head;
+    // while(temp != NULL) {
+    //     st.push(temp->data);
+    //     temp = temp->next;
+    // }
+    // temp = head;
+    // while(temp != NULL) {
+    //     if(temp->data != st.top()) return 0;
+    //     temp = temp->next;
+    //     st.pop();
+    // }
+    // return 1;
+
+    // TC: O(2n) and SC: O(1)
+    if(head == NULL || head->next == NULL) return true;
+    Node* fast = head;
+    Node* slow = head;
+    while(fast->next != NULL && fast->next->next != NULL) {     // you will reach to end of first half in case of even elements or in middle of LL in case of odd elements
+        fast = fast->next->next;
+        slow = slow->next;
+    }
+    Node* newHead = reverseLL(slow->next);
+    Node* first = head;
+    Node* second = newHead;
+    while(second != NULL) {
+        if(first->data != second->data) {
+            reverseLL(newHead);
+            return false;
+        }
+        first = first->next;
+        second = second->next;
+    }
+    reverseLL(newHead);
+    return true;
+}
+
+
 
 
 int main() {
@@ -426,7 +468,8 @@ int main() {
     // head = oddEvenLL2(head);
     // head = sort012(head);
     // head = remove_KthNode_fromEnd(head,4);
-    Traversal(head);
+    // cout << isPalindrome(head);
+    // Traversal(head);
     return 0;
 }
 
