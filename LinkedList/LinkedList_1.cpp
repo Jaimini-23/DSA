@@ -428,10 +428,91 @@ bool isPalindrome(Node* head) {
 }
 
 
+int helper(Node* head) {
+    Node* temp = head;
+    if(temp == NULL) return 1;
+    int carry = helper(temp->next);
+    temp->data = temp->data + carry;
+    if(temp->data < 10) return 0;
+    temp->data = 0;
+    return 1;
+}
+Node* addOne(Node* head) {              // 159 + 1 = 160 or 9999 + 1 = 10000
+    // TC: O(3n) and SC: O(1)
+    // head = reverseLL(head);
+    // Node* temp = head;
+    // int carry = 1;
+    // while(temp != NULL) {
+    //     temp->data = temp->data + carry;
+    //     if(temp->data < 10) {
+    //         carry = 0;
+    //         break;
+    //     }
+    //     else {
+    //         temp->data = 0;
+    //         carry = 1;
+    //     }
+    //     temp = temp->next;
+    // }
+    // if(carry) {
+    //     Node* newNode = new Node(1);
+    //     head = reverseLL(head);
+    //     newNode->next = head;
+    //     return newNode;
+    // }
+    // head = reverseLL(head);
+    // return head;
+
+    // TC: O(n) and SC: O(n)
+    int carry = helper(head);       // to access the singly LL from back, we can use recursion(back tracking) instead reverse
+    if(carry) {
+        Node* newNode = new Node(1);
+        newNode->next = head;
+        return newNode;
+    }
+    return head;
+}
+
+
+Node* intersectionNode(Node* head1, Node* head2) {
+    // average
+    // int len1 = lengthOfLL(head1);
+    // int len2 = lengthOfLL(head2);
+    // int diff = abs(len1 - len2);
+    // Node* t1 = head1;
+    // Node* t2 = head2;
+    // if(len2 > len1) {
+    //     for(int i=0; i<diff; i++) t2 = t2->next;
+    // }
+    // else {
+    //     for(int i=0; i<diff; i++) t1 = t1->next;
+    // }
+    // while(t1 != t2 && t1 != NULL && t2 != NULL) {
+    //     t1 = t1->next;
+    //     t2 = t2->next;
+    // }
+    // return t1;
+
+    // TC: O(n+m) and SC: O(1)
+    if(head1 == NULL || head2 == NULL) return NULL;
+    Node* t1 = head1;
+    Node* t2 = head2;
+    while(t1 != t2) {
+        t1 = t1->next;
+        t2 = t2->next;
+
+        if(t1 == NULL) t1 = head2;
+        if(t2 == NULL) t2 = head1;
+        // these conditions are alligning the pointers on same vertical level
+    }
+    return t1;
+}
+
+
 
 
 int main() {
-    vector<int> arr = {12,74,87,58,69,56,95,15,65,23};
+    vector<int> arr = {9,9,9,9};
     Node* head = convertArr2LL(arr);
     // cout << endl << lengthOfLL(head);
     // cout << checkIfPresent(head,33);
@@ -470,6 +551,9 @@ int main() {
     // head = remove_KthNode_fromEnd(head,4);
     // cout << isPalindrome(head);
     // Traversal(head);
+
+    head = addOne(head);
+    Traversal(head);
     return 0;
 }
 
