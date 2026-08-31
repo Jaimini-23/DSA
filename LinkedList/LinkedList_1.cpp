@@ -498,11 +498,14 @@ Node* intersectionNode(Node* head1, Node* head2) {
     Node* t1 = head1;
     Node* t2 = head2;
     while(t1 != t2) {
-        t1 = t1->next;
-        t2 = t2->next;
-
-        if(t1 == NULL) t1 = head2;
-        if(t2 == NULL) t2 = head1;
+        if(t1 == NULL) {
+            t1 = head2;
+        }
+        else t1 = t1->next;
+        if(t2 == NULL) {
+            t2 = head1;
+        }
+        else t2 = t2->next;
         // these conditions are alligning the pointers on same vertical level
     }
     return t1;
@@ -558,6 +561,42 @@ bool detectLoop(Node* head) {
         if(slow == fast) return true;
     }
     return false;
+}
+
+
+int length(Node* slow,Node* fast) {
+    int cnt = 1;
+    fast = fast->next;
+    while(fast != slow) {
+        fast = fast->next;
+        cnt++;
+    }
+    return cnt;
+}
+int lengthOfLoop(Node* head) {
+    // Hashing
+    // Node* temp = head;
+    // map<Node*,int> mp;
+    // int timer = 1;
+    // while(temp != NULL) {
+    //     if(mp.find(temp) != mp.end()) {
+    //         int value = mp[temp];
+    //         return timer - value;
+    //     }
+    //     mp[temp] = timer;
+    //     timer++;
+    //     temp = temp->next;
+    // }
+    // return 0;
+
+    Node* slow = head;
+    Node* fast = head;
+    while(fast != NULL && fast->next != NULL) {
+        fast = fast->next->next;
+        slow = slow->next;
+        if(slow == fast) return length(slow,fast);
+    }
+    return 0;
 }
 
 
