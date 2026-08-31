@@ -509,6 +509,36 @@ Node* intersectionNode(Node* head1, Node* head2) {
 }
 
 
+Node* middleElement(Node* head) {
+    // TC: O(n + n/2) and SC: O(1)
+    // if(head == NULL || head->next == NULL) return head;
+    // int cnt = 0;
+    // Node* temp = head;
+    // while(temp != NULL) {
+    //     cnt++;
+    //     temp = temp->next;
+    // }
+    // temp = head;
+    // int middleNode = (cnt/2) + 1;
+    // while(temp != NULL) {
+    //     middleNode--;
+    //     if(middleNode == 0) break;
+    //     temp = temp->next;
+    // }
+    // return temp;
+
+    // Tortoise and Hair 
+    // TC: O(n/2) and SC: O(1)
+    Node* fast = head;
+    Node* slow = head;
+    while(fast != NULL && fast->next != NULL) {     // for 2nd middle in even length
+        fast = fast->next->next;                    // for 1st middle in even length, while(fast->next != NULL && fast->next->next != NULL)
+        slow = slow->next;
+    }
+    return slow;
+}
+
+
 
 
 int main() {
