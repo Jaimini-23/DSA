@@ -226,7 +226,7 @@ Node* findTail(Node* head) {
     return temp;
 }
 vector<pair<int,int>> pairsOfGivenSum(Node* head, int k) {        // LinkedList is sorted
-    // TC: O(2n) and SC: O(1) in solve but some space to return the ans
+    // TC: O(2n) and SC: O(1)_in solve but some space to return the ans
     vector<pair<int,int>> ans;
     if(head == NULL) return ans;
     Node* left = head;
@@ -241,6 +241,25 @@ vector<pair<int,int>> pairsOfGivenSum(Node* head, int k) {        // LinkedList 
         else right = right->back;
     }
     return ans;
+}
+
+
+Node* removeDuplicates(Node* head) {              // for sorted DLL 
+    // TC: O(n)_includes both loops and SC: O(1)
+    if(head == NULL || head->next == NULL) return head;
+    Node* temp = head;
+    while(temp != NULL && temp->next != NULL) {
+        Node* newNode = temp->next;
+        while(newNode != NULL && newNode->data == temp->data) {
+            Node* duplicate = newNode;
+            newNode = newNode->next;
+            delete duplicate;
+        }
+        temp->next = newNode;
+        if(newNode != NULL) newNode->back = temp;
+        temp = temp->next;
+    }
+    return head;
 }
 
 
@@ -265,10 +284,12 @@ int main() {
     // head = deleteAllOccurrences(head,10);
     // Traversal(head);
 
-    vector<pair<int,int>> result = pairsOfGivenSum(head,54);
-    for(auto it : result) {
-        cout << it.first << " " << it.second << endl;
-    }
+    // vector<pair<int,int>> result = pairsOfGivenSum(head,54);
+    // for(auto it : result) {
+    //     cout << it.first << " " << it.second << endl;
+    // }
+    head = removeDuplicates(head);
+    Traversal(head);
     return 0;
 }
 
