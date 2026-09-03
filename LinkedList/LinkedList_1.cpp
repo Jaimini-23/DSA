@@ -634,6 +634,25 @@ Node* deleteMiddle(Node* head) {
 }
 
 
+Node* loopNode(Node* head) {      // the node from that linked list loop starts
+    Node* fast = head;
+    Node* slow = head;
+    while(fast != NULL && fast->next != NULL) {
+        slow = slow->next;
+        fast = fast->next->next;
+        if(slow == fast) {
+            slow = head;
+            while(slow != fast) {
+                slow = slow->next;
+                fast = fast->next;
+            }
+            return slow;
+        }
+    }
+    return NULL;
+}
+
+
 
 
 int main() {
