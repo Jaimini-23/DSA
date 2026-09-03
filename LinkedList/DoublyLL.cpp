@@ -195,8 +195,27 @@ Node* reverseLL(Node* head) {
 }
 
 
-
-
+Node* deleteAllOccurrences(Node* head, int k) {
+    // TC: O(n) and SC: O(1)
+    Node* temp = head;
+    while(temp != NULL) {
+        if(temp->data == k) {
+            if(temp == head) {
+                head = head->next;
+            }
+            Node* nextNode = temp->next;
+            Node* prevNode = temp->back; 
+            if(nextNode != NULL) nextNode->back = prevNode;
+            if(prevNode != NULL) prevNode->next = nextNode;
+            delete temp;
+            temp = nextNode;
+        }
+        else {
+            temp = temp->next;
+        }
+    }
+    return head;
+}
 
 
 
