@@ -750,7 +750,7 @@ Node* mergeKsortedLists(vector<Node*>& list) {
     // }
     // return head;
 
-    // Optimal
+    // Optimal (TC: ~O(nlogk) and SC: O(k))
     priority_queue<pair<int,Node*>, vector<pair<int,Node*>>, greater<pair<int,Node*>>> pq;      // min heap
     for(int i=0; i<list.size(); i++) {
         if(list[i]) {
@@ -768,6 +768,30 @@ Node* mergeKsortedLists(vector<Node*>& list) {
         temp = temp->next;
     }
     return dummyNode->next;
+}
+
+
+Node* findMiddle(Node* head) {
+    Node* slow = head;
+    Node* fast = head;
+    fast = fast->next;
+    while(fast != NULL && fast->next != NULL) {
+        fast = fast->next->next;
+        slow = slow->next;
+    }
+    return slow;
+}
+Node* sort(Node* head) {                  // Merge Sort
+    // TC: O(nlogn) and SC: O(logn)_recursive Stacks
+    if(head == NULL || head->next == NULL) return head;
+    Node* middle = findMiddle(head);
+    Node* leftHead = head;
+    Node* rightHead = middle->next;
+    middle->next = nullptr;
+
+    leftHead = sort(leftHead);
+    rightHead = sort(rightHead);
+    return mergeTwoSortedLL(leftHead,rightHead);
 }
 
 
