@@ -653,10 +653,41 @@ Node* loopNode(Node* head) {      // the node from that linked list loop starts
 }
 
 
+Node* findKthNode(Node* temp, int k) {
+    k -= 1;
+    while(k > 0 && temp != NULL) {
+        k--;
+        temp = temp->next;
+    }
+    return temp;
+}
+Node* reverseKNodesPairs(Node* head, int k) {
+    Node* temp = head;
+    Node* prevNode = NULL;
+    while(temp != NULL) {
+        Node* KthNode = findKthNode(temp,k);
+        if(KthNode == NULL) {
+            if(prevNode) prevNode->next = temp;
+            break;
+        }
+
+        Node* nextNode = KthNode->next;
+        KthNode->next = NULL;
+        Node* newHead = reverseLL(temp);
+        if(temp == head) head = newHead;
+        else prevNode->next = newHead;
+
+        prevNode = temp;
+        temp = nextNode;
+    }
+    return head;
+}
+
+
 
 
 int main() {
-    vector<int> arr = {9,9,9,9};
+    vector<int> arr = {12,23,48,59,75,86,26,42,53,51,49};
     Node* head = convertArr2LL(arr);
     // cout << endl << lengthOfLL(head);
     // cout << checkIfPresent(head,33);
@@ -696,7 +727,10 @@ int main() {
     // cout << isPalindrome(head);
     // Traversal(head);
 
-    head = addOne(head);
+    // head = addOne(head);
+    // Traversal(head);
+
+    head = reverseKNodesPairs(head,3);
     Traversal(head);
     return 0;
 }
