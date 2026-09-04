@@ -661,7 +661,7 @@ Node* findKthNode(Node* temp, int k) {
     }
     return temp;
 }
-Node* reverseKNodesPairs(Node* head, int k) {
+Node* reverseNodes_inKGroups(Node* head, int k) {
     Node* temp = head;
     Node* prevNode = NULL;
     while(temp != NULL) {
@@ -674,12 +674,32 @@ Node* reverseKNodesPairs(Node* head, int k) {
         Node* nextNode = KthNode->next;
         KthNode->next = NULL;
         Node* newHead = reverseLL(temp);
-        if(temp == head) head = newHead;
+        if(temp == head) head = newHead;         // for first time
         else prevNode->next = newHead;
 
         prevNode = temp;
         temp = nextNode;
     }
+    return head;
+}
+
+
+Node* rotate(Node* head, int k) {
+    // TC: O(2n) and SC: O(1)
+    if(head == NULL || head->next == NULL) return head;
+    Node* temp = head;
+    int len = 1;
+    while(temp->next != NULL) {
+        len++;
+        temp = temp->next;
+    }
+    if(k % len == 0) return head;
+    k = k % len;
+
+    temp->next = head;
+    Node* newLastNode = findKthNode(head,len - k);
+    head = newLastNode->next;
+    newLastNode->next = NULL;
     return head;
 }
 
@@ -730,7 +750,7 @@ int main() {
     // head = addOne(head);
     // Traversal(head);
 
-    head = reverseKNodesPairs(head,3);
+    head = reverseNodes_inKGroups(head,3);
     Traversal(head);
     return 0;
 }
