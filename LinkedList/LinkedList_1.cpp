@@ -704,6 +704,39 @@ Node* rotate(Node* head, int k) {
 }
 
 
+Node* mergeTwoSortedLL(Node* head1, Node* head2) {
+    // TC: O(n + m) and SC: O(1)
+    Node* dummyNode = new Node(-1);
+    Node* temp = dummyNode;
+    Node* t1 = head1;
+    Node* t2 = head2;
+    while(t1 != NULL && t2 != NULL) {
+        if(t1->data < t2->data) {
+            temp->next = t1;
+            temp = t1;
+            t1 = t1->next;
+        }
+        else {
+            temp->next = t2;
+            temp = t2;
+            t2 = t2->next;
+        }
+    }
+
+    while(t1) {
+        temp->next = t1;
+        temp = t1;
+        t1 = t1->next;
+    }
+    while(t2) {
+        temp->next = t2;
+        temp = t2;
+        t2 = t2->next;
+    }
+    return dummyNode->next;
+}
+
+
 
 
 int main() {
