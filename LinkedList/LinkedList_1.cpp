@@ -723,17 +723,52 @@ Node* mergeTwoSortedLL(Node* head1, Node* head2) {
         }
     }
 
-    if(t1) {
-        temp->next = t1;
-    }
-    else {
-        temp->next = t2;
-    }
+    if(t1) temp->next = t1;
+    else temp->next = t2;
     return dummyNode->next;
 }
 
 
+Node* mergeKsortedLists(vector<Node*>& list) {
+    // Brute (TC: O(n + nlogn + n) and SC: O(n))
+    // vector<int> arr;
+    // for(int i=0; i<list.size(); i++) {
+    //     Node* temp = list[i];
+    //     while(temp != NULL) {
+    //         arr.push_back(temp->data);
+    //         temp = temp->next;
+    //     }
+    // }
+    // sort(arr.begin(),arr.end());
+    // Node* head = convertArr2LL(arr);
+    // return head;
 
+    // Better (TC: ~O(n^3) ans SC: O(1))
+    // Node* head = list[0];
+    // for(int i=1; i<list.size(); i++) {
+    //     head = mergeTwoSortedLL(head, list[i]); 
+    // }
+    // return head;
+
+    // Optimal
+    priority_queue<pair<int,Node*>, vector<pair<int,Node*>>, greater<pair<int,Node*>>> pq;      // min heap
+    for(int i=0; i<list.size(); i++) {
+        if(list[i]) {
+            pq.push({list[i]->data,list[i]});
+        }
+    }
+    
+    Node* dummyNode = new Node(-1);
+    Node* temp = dummyNode;
+    while(!pq.empty()) {
+        auto it = pq.top();
+        pq.pop();
+        if(it.second->next) pq.push({it.second->next->data, it.second->next});
+        temp->next = it.second;
+        temp = temp->next;
+    }
+    return dummyNode->next;
+}
 
 
 
