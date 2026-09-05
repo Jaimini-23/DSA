@@ -353,6 +353,77 @@ Node* cloneRandomPointerLL(Node* head) {
 }
 
 
+// template <typename T>
+// class Node {
+// public:
+//     T data;
+//     Node<T>* next;
+//     Node<T>* back;
+
+//     Node(T data1) {
+//         data = data1;
+//         next = nullptr;
+//         back = nullptr;
+//     }
+
+//     Node(T data1, Node<T>* next1, Node<T>* back1) {
+//         data = data1;
+//         next = next1;
+//         back = back1;
+//     }
+// };
+// for this way write like this:
+// Node<int>* head = new Node<int>(10);
+// Node<string>* currentPage = new Node<string>("google.com");
+
+//OR
+// class Node {
+// public:
+//     string data;
+//     Node* next;
+//     Node* back;
+
+//     Node(string data1) {
+//         data = data1;
+//         next = nullptr;
+//         back = nullptr;
+//     }
+// };
+class Browser {
+    Node* currentPage;
+    public:
+
+    // Browser(string& homepage) {
+    //     currentPage = new Node(homepage);
+    // }
+    
+    // void visit(string& url) {
+    //     Node* newNode = new Node(url);
+    //     currentPage->next = newNode;
+    //     newNode->back = currentPage;
+    //     currentPage = newNode;
+    // }
+
+    // string back(int steps) {
+    //     while(steps) {
+    //         if(currentPage->back) currentPage = currentPage->back;
+    //         else break;
+    //         steps--;
+    //     }
+    //     return currentPage->data;
+    // }
+
+    // string forward(int steps) {
+    //     while(steps) {
+    //         if(currentPage->next) currentPage = currentPage->next;
+    //         else break;
+    //         steps--;
+    //     }
+    //     return currentPage->data;
+    // }
+};
+
+
 
 
 int main() {
