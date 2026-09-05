@@ -744,6 +744,7 @@ Node* mergeKsortedLists(vector<Node*>& list) {
     // return head;
 
     // Better (TC: ~O(n^3) ans SC: O(1))
+    // if(lists.empty()) return NULL;
     // Node* head = list[0];
     // for(int i=1; i<list.size(); i++) {
     //     head = mergeTwoSortedLL(head, list[i]); 

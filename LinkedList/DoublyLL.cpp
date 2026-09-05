@@ -293,6 +293,66 @@ Node* flattening(Node* head) {
 }
 
 
+void insertInBetween(Node* head) {
+    Node* temp = head;
+    while(temp != NULL) {
+        Node* nextElement = temp->next;
+        Node* copy = new Node(temp->data);
+        copy->next = nextElement;
+        temp->next = copy;
+
+        temp = nextElement;
+    }
+}
+void connectRandomPointers(Node* head) {
+    // Node* temp = head;
+    // while(temp != NULL) {
+    //     Node* copyNode = temp->next;
+    //     if(temp->random) copyNode->random = temp->random->next;
+    //     else copyNode->random = nullptr;
+    //     temp = temp->next->next;
+    // }
+}
+Node* getDeepCopyList(Node* head) {
+    Node* temp = head;
+    Node* dummyNode = new Node(-1);
+    Node* res = dummyNode;
+
+    while(temp != NULL) {
+        // creating new list
+        res->next = temp->next;
+        res = res->next;
+
+        temp->next = temp->next->next;
+        temp = temp->next;
+    }
+    return dummyNode->next;
+}
+Node* cloneRandomPointerLL(Node* head) {
+    // TC: O(2n) and SC: O(n)_map + O(n)_clone
+    // Node* temp = head;
+    // map<Node*,Node*> mp;
+    // while(temp != NULL) {
+    //     Node* newNode = new Node(temp->data);
+    //     mp[temp] = newNode;
+    //     temp = temp->next;
+    // }
+    // temp = head;
+    // while(temp != NULL) {
+    //     Node* copyNode = mp[temp];
+    //     copyNode->next = mp[temp->next];
+    //     copyNode->random = mp[temp->random];
+    //     temp = temp->next;
+    // }
+    // return mp[head];
+
+    // TC: O(3n) and SC: O(n)_clone
+    insertInBetween(head);
+    connectRandomPointers(head);
+    return getDeepCopyList(head);
+}
+
+
 
 
 int main() {
