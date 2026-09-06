@@ -1,0 +1,25 @@
+#include <bits\stdc++.h>
+using namespace std;
+
+bool validParenthesis(string str) {
+    // TC: O(n) and SC: O(n)
+    stack<char> st;
+    for(int i=0; i<str.size(); i++) {
+        if(str[i] == '(' || str[i] == '{' || str[i] == '[') {
+            st.push(str[i]);
+        }
+        else {
+            if(st.empty()) return false;
+            if((st.top() == '(' && str[i] == ')') ||
+                (st.top() == '{' && str[i] == '}') ||
+                (st.top() == '[' && str[i] == ']')) {
+                    st.pop();
+            }
+            else return false;
+        }
+    }
+    return st.size() == 0;
+}
+
+
+
