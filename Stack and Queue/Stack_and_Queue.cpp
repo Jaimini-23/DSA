@@ -67,3 +67,68 @@ string infixToPostfix(string s) {
     }
     return ans;
 }
+
+
+string infixToPrefix(string s) {
+    // Reverse the infix expression.
+    // Swap '(' with ')'.
+    // Convert the modified expression to postfix.
+    // Reverse the postfix result → Prefix.
+    reverse(s.begin(),s.end());       // reverse
+    for(int i=0; i<s.size(); i++) {      // swap '(' and ')'
+        if(s[i] == '(') s[i] = ')';
+        else if(s[i] == ')') s[i] = '(';
+    }
+
+    string ans = "";
+    stack<char> st;
+    for(int i=0; i<s.size(); i++) {
+        if((s[i] >= 'a' && s[i] <= 'z') ||
+            (s[i] >= 'A' && s[i] <= 'Z') ||
+            (s[i] >= '0' && s[i] <= '9')) {
+                ans += s[i];
+        }
+
+        else if(s[i] == '(') st.push(s[i]);
+        else if(s[i] == ')') {
+            while(!st.empty() && st.top() != '(') {
+                ans += st.top();
+                st.pop();
+            }
+            st.pop();
+        }
+
+        else {
+            while(!st.empty() && st.top() != '(' &&
+            priority(s[i]) < priority(st.top())) {
+
+                ans += st.top();
+                st.pop();
+            }
+            st.push(s[i]);
+        }
+    }
+
+    while(!st.empty()) {
+        ans += st.top();
+        st.pop();
+    }
+
+    reverse(ans.begin(),ans.end());
+    return ans;
+}
+
+
+
+
+int main() {
+    string s = "a+b*(c^d-e)";
+    // string result = infixToPostfix(s);
+    string result = infixToPrefix(s);
+    for(auto it: result) cout << it;
+    return 0;
+}
+
+
+
+
