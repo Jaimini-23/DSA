@@ -122,6 +122,7 @@ string infixToPrefix(string s) {
 
 string postfixToInfix(string s) {
     // TC: O(n) + O(n)_can be for string concatination and SC: O(n)
+    // if operator, then put it in between last two operand
     stack<string> st;
     for(int i=0; i<s.size(); i++) {
         if(isalnum(s[i])) {         
@@ -135,6 +136,31 @@ string postfixToInfix(string s) {
             string t2 = st.top();
             st.pop();
             string expression = "(" + t2 + s[i] + t1 + ")";
+            st.push(expression);
+        }
+    }
+    return st.top();
+}
+
+
+string prefixToInfix(string s) {
+    // TC: O(n) + O(n) can be used for string concatenation
+    // SC: O(n)
+    // Traverse from right to left.
+    // If an operator is found, place it between the top two operands.
+    stack<string> st;
+    for(int i=s.size()-1; i>=0; i--) {
+        if(isalnum(s[i])) {         
+            string operand = "";      // converting char into string, to push in stack<string>
+            operand += s[i];
+            st.push(operand);
+        }
+        else {
+            string t1 = st.top();
+            st.pop();
+            string t2 = st.top();
+            st.pop();
+            string expression = "(" + t1 + s[i] + t2 + ")";
             st.push(expression);
         }
     }
