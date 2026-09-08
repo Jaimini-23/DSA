@@ -144,7 +144,7 @@ string postfixToInfix(string s) {
 
 
 string prefixToInfix(string s) {
-    // TC: O(n) + O(n) can be used for string concatenation
+    // TC: O(n) + O(n)_can be used for string concatenation
     // SC: O(n)
     // Traverse from right to left.
     // If an operator is found, place it between the top two operands.
@@ -168,14 +168,42 @@ string prefixToInfix(string s) {
 }
 
 
+string postfixToPrefix(string s) {
+    // TC: O(n) + O(n)_can be for string concatination and SC: O(n)
+    // 
+    stack<string> st;
+    for(int i=0; i<s.size(); i++) {
+        if(isalnum(s[i])) {         
+            string operand = "";
+            operand += s[i];
+            st.push(operand);
+        }
+        else {
+            string t1 = st.top();
+            st.pop();
+            string t2 = st.top();
+            st.pop();
+            // operator + t2 + t1
+            string expression = s[i] + t2 + t1;         // eg. -bc,+de
+            st.push(expression);
+        }
+    }
+    return st.top();
+}
+
+
 
 
 int main() {
     // string s = "a+b*(c^d-e)";
     // string result = infixToPostfix(s);
     // string result = infixToPrefix(s);
-    string s = "ab+c*de-f/*";
-    string result = postfixToInfix(s);
+
+    // string s = "ab+c*de-f/*";
+    // string result = postfixToInfix(s);
+
+    string s = "*/ab-cd";
+    string result = prefixToInfix(s);
     for(auto it: result) cout << it;
     return 0;
 }
