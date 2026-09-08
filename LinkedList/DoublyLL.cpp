@@ -332,7 +332,7 @@ Node* cloneRandomPointerLL(Node* head) {
     // TC: O(2n) and SC: O(n)_map + O(n)_clone
     // Node* temp = head;
     // map<Node*,Node*> mp;
-    // while(temp != NULL) {
+    // while(temp != NULL) {                         // making copy of each node
     //     Node* newNode = new Node(temp->data);
     //     mp[temp] = newNode;
     //     temp = temp->next;

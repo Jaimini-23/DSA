@@ -70,6 +70,7 @@ string infixToPostfix(string s) {
 
 
 string infixToPrefix(string s) {
+    // TC: O(n) and SC: O(n)
     // Reverse the infix expression.
     // Swap '(' with ')'.
     // Convert the modified expression to postfix.
@@ -82,7 +83,7 @@ string infixToPrefix(string s) {
 
     string ans = "";
     stack<char> st;
-    for(int i=0; i<s.size(); i++) {
+    for(int i=0; i<s.size(); i++) {                 // convert into postfix
         if((s[i] >= 'a' && s[i] <= 'z') ||
             (s[i] >= 'A' && s[i] <= 'Z') ||
             (s[i] >= '0' && s[i] <= '9')) {
@@ -114,17 +115,41 @@ string infixToPrefix(string s) {
         st.pop();
     }
 
-    reverse(ans.begin(),ans.end());
+    reverse(ans.begin(),ans.end());      // reverse ans
     return ans;
+}
+
+
+string postfixToInfix(string s) {
+    // TC: O(n) + O(n)_can be for string concatination and SC: O(n)
+    stack<string> st;
+    for(int i=0; i<s.size(); i++) {
+        if(isalnum(s[i])) {         
+            string operand = "";      // converting char into string, to push in stack<string>
+            operand += s[i];
+            st.push(operand);
+        }
+        else {
+            string t1 = st.top();
+            st.pop();
+            string t2 = st.top();
+            st.pop();
+            string expression = "(" + t2 + s[i] + t1 + ")";
+            st.push(expression);
+        }
+    }
+    return st.top();
 }
 
 
 
 
 int main() {
-    string s = "a+b*(c^d-e)";
+    // string s = "a+b*(c^d-e)";
     // string result = infixToPostfix(s);
-    string result = infixToPrefix(s);
+    // string result = infixToPrefix(s);
+    string s = "ab+c*de-f/*";
+    string result = postfixToInfix(s);
     for(auto it: result) cout << it;
     return 0;
 }
