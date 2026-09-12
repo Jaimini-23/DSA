@@ -240,6 +240,52 @@ vector<int> nextGreaterElement(vector<int> &arr) {
 }
 
 
+vector<int> nextGreaterElement2(vector<int> &arr) {          // after right if no one found, then check from begining (circular way)
+    // Brute force (TC: O(n^2) and SC: O(n))
+    // vector<int> nge(arr.size(),-1);
+    // for(int i=0; i<arr.size(); i++) {
+    //     for(int j=i+1; j<arr.size(); j++) {
+    //         if(arr[j] > arr[i]) {
+    //             nge[i] = arr[j];
+    //             break;
+    //         }
+    //     }
+    //     if(nge[i] == -1) {
+    //         for(int j=0; j<i; j++) {
+    //             if(arr[j] > arr[i]) {
+    //                 nge[i] = arr[j];
+    //                 break;
+    //             }
+    //         }
+    //     }
+    // }
+
+    // Simpler Brute (TC: O(n^2) and SC: O(n))
+    // vector<int> nge(arr.size(),-1);
+    // for(int i=0; i<arr.size(); i++) {
+    //     for(int j=i+1; j<(i + arr.size()); j++) {       // thinks like an repeating the arr at end as begining, ex: arr = {1,2,4} then arr = {1,2,4,1,2,4}
+    //         int index = j % arr.size();
+    //         if(arr[index] > arr[i]) {
+    //             nge[i] = arr[index];
+    //             break;
+    //         }
+    //     }
+    // }
+    // return nge;
+
+    // Optimal (TC: O(4n) SC: O(2n) + O(n))
+    stack<int> st;
+    vector<int> nge(arr.size(),-1);
+    int n = arr.size();
+    for(int i=2*n-1; i>=0; i--) {
+        while(!st.empty() && st.top() <= arr[i%n]) st.pop();
+        if(i < n) nge[i] = st.empty() ? -1 : st.top();
+        st.push(arr[i%n]);
+    }
+    return nge;
+}
+
+
 
 
 int main() {
@@ -258,8 +304,9 @@ int main() {
     // string result = prefixToPostfix(s);
     // for(auto it: result) cout << it;
 
-    vector<int> arr = {6,0,8,1,3};
-    arr = nextGreaterElement(arr);
+    vector<int> arr = {2,10,12,1,11};
+    // arr = nextGreaterElement(arr);
+    arr = nextGreaterElement2(arr);
     for(auto it : arr) cout << it <<" ";
     return 0;
 }
