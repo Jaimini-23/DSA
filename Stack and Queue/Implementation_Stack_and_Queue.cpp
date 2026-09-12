@@ -400,5 +400,70 @@ class queueUsingStack {
 };
 
 
+class minStack {
+    // TC: O(1) and SC: O(2n)
+    // stack<pair<int,int>> st;
+    // void push(int x) {
+    //     if(st.empty()) {
+    //         st.push({x,x});
+    //     }
+    //     else {
+    //         st.push({x,min(x,st.top().second)});
+    //     }
+    // }
+
+    // int getMin() {
+    //     st.top().second;
+    // }
+
+    // int top() {
+    //     st.top().first;
+    // }
+
+
+    // TC: O(1) and SC: O(n)
+    stack<int> st;
+    int mini;
+    void push(int x) {
+        if(st.empty()) {
+            mini = x;
+            st.push(x);
+        }
+        else {
+            if(x > mini) st.push(x);
+            else {
+                st.push(2 * x - mini);            // pushing not value but pushing the encoded value
+                mini = x;
+                // When the current minimum is popped, we need to recover the previous minimum in O(1). The encoded value stores enough information to do exactly that.
+            } 
+        }
+    }
+
+    void pop() {
+        if(st.empty()) return;
+        int n = st.top();
+        st.pop();
+        if(n < mini) {                  // that means thats an encoded value
+            mini = 2 * mini - n;            // retriving the previous mini after poping the current mini
+        }
+    }
+
+    int top() {
+        if(st.empty()) return -1;
+        int n = st.top();
+        if(n < mini) {
+            return mini;        // actual value of n is mini, n is encoded value
+        }
+        return n;                  // when n is not encoded
+    }
+
+    int getMin() {
+        if(st.empty()) return -1;
+        return mini;
+    }
+    // Without encoding, we'd have to search the remaining stack to find the new minimum → O(n). With encoding → O(1).
+};
+
+
 
 
