@@ -214,6 +214,32 @@ string prefixToPostfix(string s) {
 }
 
 
+vector<int> nextGreaterElement(vector<int> &arr) {
+    // Brute (TC: O(n^2) and SC: O(n)_nge)
+    // vector<int> nge(arr.size(),-1);       // {-1,-1,-1,.....,-1}
+    // for(int i=0; i<arr.size(); i++) {
+    //     for(int j=i+1; j<arr.size(); j++) {
+    //         if(arr[j] > arr[i]) {
+    //             nge[i] = arr[j];
+    //             break;
+    //         }
+    //     }
+    // }
+    // return nge;
+
+    // Optimal (TC: O(2n) and SC: O(n) + O(n))
+    stack<int> st;
+    vector<int> nge(arr.size(),-1);
+    for(int i=arr.size()-1; i>=0; i--) {
+        while(!st.empty() && st.top() <= arr[i]) st.pop();
+        if(st.empty()) nge[i] = -1;       // or else use continue, because we already have default vector values as -1
+        else nge[i] = st.top();
+        st.push(arr[i]);
+    }
+    return nge;
+}
+
+
 
 
 int main() {
@@ -228,9 +254,13 @@ int main() {
     // string s = "ab-cd-*";
     // string result = postfixToPrefix(s);
 
-    string s = "*+abc";
-    string result = prefixToPostfix(s);
-    for(auto it: result) cout << it;
+    // string s = "*+abc";
+    // string result = prefixToPostfix(s);
+    // for(auto it: result) cout << it;
+
+    vector<int> arr = {6,0,8,1,3};
+    arr = nextGreaterElement(arr);
+    for(auto it : arr) cout << it <<" ";
     return 0;
 }
 
