@@ -286,6 +286,33 @@ vector<int> nextGreaterElement2(vector<int> &arr) {          // after right if n
 }
 
 
+vector<int> previousSmallestElement(vector<int> &arr) {      // smaller on left
+    // Brute (TC: O(n^2) and SC: O(n))
+    // vector<int> nse(arr.size(),-1);
+    // for(int i=0; i<arr.size(); i++) {
+    //     for(int j=i-1; j>=0; j--) {
+    //         if(arr[j] < arr[i]) {
+    //             nse[i] = arr[j];
+    //             break;
+    //         }
+    //     }
+    // }
+    // return nse;
+
+    // Optimize (TC: O(2n) and SC: O(n) + O(n))
+    stack<int> st;
+    vector<int> nse(arr.size(),-1);
+    for(int i=0; i<arr.size(); i++) {
+        while(!st.empty() && st.top() >= arr[i]) st.pop();
+        if(!st.empty()) {
+            nse[i] = st.top();
+        }
+        st.push(arr[i]);
+    }
+    return nse;
+}
+
+
 
 
 int main() {
@@ -306,7 +333,8 @@ int main() {
 
     vector<int> arr = {2,10,12,1,11};
     // arr = nextGreaterElement(arr);
-    arr = nextGreaterElement2(arr);
+    // arr = nextGreaterElement2(arr);
+    arr = previousSmallestElement(arr);
     for(auto it : arr) cout << it <<" ";
     return 0;
 }
