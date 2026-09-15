@@ -313,6 +313,43 @@ vector<int> previousSmallestElement(vector<int> &arr) {      // smaller on left
 }
 
 
+int trapRainWater(vector<int> &arr) {
+    // TC: O(3n) and SC: O(n)
+    // vector<int> suffixMax(arr.size());
+    // suffixMax[arr.size()-1] = arr[arr.size()-1];
+    // for(int i=arr.size()-2; i>=0; i--) {
+    //     suffixMax[i] = max(suffixMax[i+1],arr[i]);
+    // }
+
+    // int total = 0, prefixMax = arr[0];
+    // for(int i=0; i<arr.size(); i++) {
+    //     prefixMax = max(prefixMax,arr[i]);
+    //     int leftmax = prefixMax, rightmax = suffixMax[i];
+    //     if(arr[i] < leftmax && arr[i] < rightmax) {
+    //         total += min(leftmax,rightmax) - arr[i];
+    //     }
+    // }
+    // return total;
+
+    // Optimal (TC: O(n) and SC: O(1))
+    int lmax = 0, rmax = 0, total = 0;
+    int l = 0, r = arr.size() - 1;
+    while(l < r) {
+        if(arr[l] < arr[r]) {
+            if(lmax > arr[l]) total += lmax - arr[l];
+            else lmax = arr[l];
+            l = l + 1; 
+        }
+        else {
+            if(rmax > arr[r]) total += rmax - arr[r];
+            else rmax = arr[r];
+            r = r - 1;
+        }
+    }
+    return total;
+}
+
+
 
 
 int main() {
