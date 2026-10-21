@@ -350,6 +350,31 @@ int trapRainWater(vector<int> &arr) {
 }
 
 
+int subarrayMinimumSum(vector<int> &arr) {
+    // Brute (TC: O(n^2) and SC: O(1))
+    // int sum = 0;
+    // int mod = (int)(1e9 + 7);
+    // for(int i=0; i<arr.size(); i++) {
+    //     int mini = INT_MAX;
+    //     for(int j=i; j<arr.size(); j++) {
+    //         mini = min(mini,arr[j]);
+    //         sum = (sum + mini) % mod;
+    //     }
+    // }
+    // return sum;
+
+    // Optimize
+    // vector<int> nse = findNSE(arr);
+    // vector<int> pse = findPSE(arr);
+    // int sum = 0;
+    // int mod = (int)(1e9 + 7);
+    // for(int i=0; i<arr.size(); i++) {
+    //     int left = i - pse[i];
+    //     int right = nse[i] - i;
+    // }
+}
+
+
 
 
 int main() {
@@ -368,11 +393,15 @@ int main() {
     // string result = prefixToPostfix(s);
     // for(auto it: result) cout << it;
 
-    vector<int> arr = {2,10,12,1,11};
+    // vector<int> arr = {2,10,12,1,11};
     // arr = nextGreaterElement(arr);
     // arr = nextGreaterElement2(arr);
-    arr = previousSmallestElement(arr);
-    for(auto it : arr) cout << it <<" ";
+    // arr = previousSmallestElement(arr);
+    // for(auto it : arr) cout << it <<" ";
+
+    vector<int> arr = {0,1,0,1,2,3,2,1,0,1,2,1};
+    // cout << trapRainWater(arr);
+    cout << subarrayMinimumSum(arr);
     return 0;
 }
 

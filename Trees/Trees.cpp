@@ -11,13 +11,14 @@ using namespace std;
 // Leaf Node: A node that does not have any children
 // Sub Tree: A smaller tree structure formed by a chosen node and all the nodes beneath it
 // Ancestors: The lineage of parent nodes going all the way up to the root (parent, grandparent, etc.)
+// Descendants: Any node below it, directly or indirectly(all nodes below it)
 
 // Types of Binary Trees
 // 1. Full Binary Tree: Every single node must have either 0 or 2 children. A node cannot have exactly 1 child
 // 2. Complete Binary Tree: All levels of the tree must be completely filled, with the only exception being the last level.
 //      For the last level, all nodes must be pushed as far left as possible
 // 3. Perfect Binary Tree: All leaf nodes must be at the exact same level
-// 4. Balanced Binary Tree: The total height of the tree can be at a maximum of $O(\log N)$, where $N$ represents the number of nodes
+// 4. Balanced Binary Tree: The total height of the tree can be at a maximum of O(logn), where n represents the number of nodes
 //      Keeping a tree balanced prevents it from getting too deep, ensuring search operations remain highly efficient
 // 5. Degenerate (Skewed) Tree: Every single node has exactly one child. This type of tree forms a straight line and essentially behaves like a linear linked list
 
