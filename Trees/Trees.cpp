@@ -356,7 +356,30 @@ bool identicalOrNot(Node* p, Node* q) {
 }
 
 
+vector<vector<int>> zigZagLevelOrder(Node* root) {      // or Spiral Traversal
+    vector<vector<int>> ans;
+    if(root == NULL) return ans;
+    queue<Node*> q;
+    q.push(root);
 
+    bool leftToRight = true;
+    while(!q.empty()) {
+        int size = q.size();
+        vector<int> level(size);
+        for(int i=0; i<size; i++) {
+            Node* node = q.front();
+            q.pop();
+
+            int index = leftToRight ? i : size - i - 1;
+            level[index] = node->data;
+            if(node->left) q.push(node->left);
+            if(node->right) q.push(node->right);
+        }
+        leftToRight = !leftToRight;
+        ans.push_back(level);
+    }
+    return ans;
+}
 
 
 
