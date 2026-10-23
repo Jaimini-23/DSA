@@ -348,15 +348,16 @@ int maxPathSum(Node* root, int &maxi) {
 }
 
 
-bool identicalOrNot(Node* p, Node* q) {
+bool isSameTree(Node* p, Node* q) {
     if(p == NULL || q == NULL) return (p == q);
     return (p->data == q->data)
-        && identicalOrNot(p->left,q->left)
-        && identicalOrNot(p->right,q->right);
+        && isSameTree(p->left,q->left)
+        && isSameTree(p->right,q->right);
 }
 
 
 vector<vector<int>> zigZagLevelOrder(Node* root) {      // or Spiral Traversal
+    // Maximum of code is simillar to Level Order Traversal
     vector<vector<int>> ans;
     if(root == NULL) return ans;
     queue<Node*> q;
@@ -378,6 +379,56 @@ vector<vector<int>> zigZagLevelOrder(Node* root) {      // or Spiral Traversal
         leftToRight = !leftToRight;
         ans.push_back(level);
     }
+    return ans;
+}
+
+
+bool isLeaf(Node* root) {
+    return root != NULL 
+        && root->left == NULL
+        && root->right == NULL;
+}
+void addLeftBoundary(Node* root, vector<int> &ans) {
+    Node* curr = root->left;
+    while(curr) {
+        if(!isLeaf(curr)) ans.push_back(curr->data);
+        if(curr->left) curr = curr->left;
+        else curr = curr->right;
+    }
+}
+void addLeaf(Node* root, vector<int> &ans) {
+    if(isLeaf(root)) {
+        ans.push_back(root->data);
+        return;
+    }
+    if(root->left) addLeaf(root->left,ans);
+    if(root->right) addLeaf(root->right,ans);
+}
+void addRightBoundary(Node* root, vector<int> &ans) {
+    Node* curr = root->right;
+    vector<int> temp;
+    while(curr) {
+        if(!isLeaf(curr)) temp.push_back(curr->data);
+        if(curr->right) curr = curr->right;
+        else curr = curr->left;
+    }
+    for(int i = (int)temp.size() - 1; i >= 0; i--) {
+        ans.push_back(temp[i]);
+    }
+}
+vector<int> boundaryTraversal(Node* root) {
+    // it is like anticlockwise circle of boundary of tree from root
+    // it is not necessary that all nodes of tree get printed 
+    // 1. left boundary excluding leaf
+    // 2. leaf node (inorder)
+    // 3. right boundary in reverse (down to up) excluding the leaf
+
+    vector<int> ans;
+    if(!root) return ans;
+    if(!isLeaf(root)) ans.push_back(root->data);
+    addLeftBoundary(root,ans);
+    addLeaf(root,ans);
+    addRightBoundary(root,ans);
     return ans;
 }
 
