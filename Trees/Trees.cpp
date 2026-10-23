@@ -338,7 +338,22 @@ int whatsDiameter(Node* root) {
 }
 
 
+int maxPathSum(Node* root, int &maxi) {
+    if(root == NULL) return 0;
+    int leftSum = max(0,maxPathSum(root->left,maxi));    // handles negative contributions from subtrees
+    int rightSum = max(0,maxPathSum(root->right,maxi));
 
+    maxi = max(maxi,leftSum + rightSum + root->data);
+    return root->data + max(leftSum,rightSum);
+}
+
+
+bool identicalOrNot(Node* p, Node* q) {
+    if(p == NULL || q == NULL) return (p == q);
+    return (p->data == q->data)
+        && identicalOrNot(p->left,q->left)
+        && identicalOrNot(p->right,q->right);
+}
 
 
 
