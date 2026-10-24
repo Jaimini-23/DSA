@@ -526,6 +526,35 @@ vector<int> leftView(Node* root) {
 }
 
 
+bool isSymmetricHelper(Node* left, Node* right) {
+    if(left == NULL || right == NULL) return left == right;
+    if(left->data != right->data) return false;
+
+    return isSymmetricHelper(left->left,right->right)
+        && isSymmetricHelper(left->right,right->left);
+}
+bool isSymmetric(Node* root) {
+    return root == NULL || isSymmetricHelper(root->left,root->right);
+}
+
+
+bool getPath(Node* root, int x, vector<int> &ans) {
+    if(!root) return false;
+    ans.push_back(root->data);
+    if(root->data == x) return true;
+
+    if(getPath(root->left,x,ans) || getPath(root->right,x,ans)) return true;
+    ans.pop_back();
+    return false;
+}
+vector<int> rootToNodePath(Node* root, int x) {
+    vector<int> ans;
+    if(root == NULL) return ans;
+    getPath(root,x,ans);
+    return ans;
+}
+
+
 
     
 int main() {
