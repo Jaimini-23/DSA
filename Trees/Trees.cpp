@@ -555,6 +555,18 @@ vector<int> rootToNodePath(Node* root, int x) {
 }
 
 
+Node* leastCommonAncestor(Node* root, Node* p, Node* q) {
+    if(root == NULL || p == root || q == root) return root;         // base condition
+    Node* left = leastCommonAncestor(root->left,p,q);
+    Node* right = leastCommonAncestor(root->right,p,q);
+
+    // result
+    if(left == NULL) return right;
+    else if(right == NULL) return left;
+    else return root;                      // left and right are non-NULL, we found our result
+}
+
+
 
     
 int main() {
