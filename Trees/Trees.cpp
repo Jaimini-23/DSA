@@ -567,18 +567,44 @@ Node* leastCommonAncestor(Node* root, Node* p, Node* q) {
 }
 
 
+int maxWidth(Node* root) {
+    // no of nodes in a level between any 2 nodes
+    // ans = (leftNode index - rightNode index) + 1
+    // node (i = 0), its left : 2 * i + 1, its right: 2 * i + 2 (zero based indexing)
+    // node(i = 1), its left : 2 * i, its right: 2 * i + 1 (one based indexing)
+    // but directly indexing all nodes can make overflow, so make every level start from 1 
+    // i = i - min
 
-    
+    int ans = 0;
+    if(root == NULL) return 0;
+    queue<pair<Node*,int>> q;
+    q.push({root,0});
+    while(!q.empty()) {
+        int size = q.size();
+        int mmin = q.front().second;           // to make the id starting from zero
+        int first, last;
+
+        for(int i=0; i<size; i++) {
+            int curr_id = q.front().second - mmin;
+            Node* node = q.front().first;       
+            q.pop();
+            if(i == 0) first = curr_id;
+            if(i == size - 1) last = curr_id;
+
+            if(node->left != NULL) q.push({node->left, curr_id * 2 + 1});
+            if(node->right != NULL) q.push({node->right, curr_id * 2 + 2});
+        }
+        ans = max(ans, last - first + 1);
+    }
+    return ans;
+}
+
+
+
+
+
 int main() {
-    // Creating a Tree in the main Function
-    // 1. Create the top-most root node
-    Node* root = new Node(1);
-    // 2. Assign and link the left child of the root
-    root->left = new Node(2);
-    // 3. Assign and link the right child of the root
-    root->right = new Node(3);
-    // 4. Further expansion (linking a child deeper in the hierarchy)
-    root->left->right = new Node(5);
+    
 }
 
 

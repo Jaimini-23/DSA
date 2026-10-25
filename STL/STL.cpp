@@ -567,7 +567,7 @@ void Extra() {
 }
 
 
- 
+
 
 int main() {
     pairs();
@@ -587,6 +587,7 @@ int main() {
     Extra();
     return 0;
 }
+
 
 
 
