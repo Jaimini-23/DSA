@@ -572,7 +572,7 @@ int maxWidth(Node* root) {
     // ans = (leftNode index - rightNode index) + 1
     // node (i = 0), its left : 2 * i + 1, its right: 2 * i + 2 (zero based indexing)
     // node(i = 1), its left : 2 * i, its right: 2 * i + 1 (one based indexing)
-    // but directly indexing all nodes can make overflow, so make every level start from 1 
+    // but directly indexing all nodes can make overflow, so make every level start from 1  
     // i = i - min
 
     int ans = 0;
@@ -619,6 +619,64 @@ void changeTree(Node* root) {               // Child Sum Property
     if(root->left) tot += root->left->data;
     if(root->right) tot += root->right->data;
     if(root->left || root->right) root->data = tot;
+}
+
+
+void markParents(Node* root, unordered_map<Node*,Node*>& parent_track, Node* target) {
+    queue<Node*> q;
+    q.push(root);
+    while (!q.empty()) {
+        Node* current = q.front();
+        q.pop();
+        if (current->left) {
+            parent_track[current->left] = current;
+            q.push(current->left);
+        }
+        if (current->right) {
+            parent_track[current->right] = current;
+            q.push(current->right);
+        }
+    }
+}
+vector<int> nodes_fromDistanceK(Node* root, Node* target, int k) {         // all nodes at the distance k from given node
+    unordered_map<Node*, Node*> parent_track;
+    markParents(root, parent_track, target);  // node -> parent
+    unordered_map<Node*, bool> visited;
+    queue<Node*> q;
+    q.push(target);
+    visited[target] = true;
+    int curr_level = 0;
+
+    while (!q.empty()) {
+        int size = q.size();
+        // Second BFS to go up to K level from target node
+        if (curr_level++ == k) break;
+        for (int i = 0; i < size; i++) {
+            Node* current = q.front();
+            q.pop();
+
+            if (current->left && !visited[current->left]) {
+                q.push(current->left);
+                visited[current->left] = true;
+            }
+            if (current->right && !visited[current->right]) {
+                q.push(current->right);
+                visited[current->right] = true;
+            }
+            if (parent_track[current] &&
+                !visited[parent_track[current]]) {
+                q.push(parent_track[current]);
+                visited[parent_track[current]] = true;
+            }
+        }
+    }
+    vector<int> result;
+    while (!q.empty()) {
+        Node* current = q.front();
+        q.pop();
+        result.push_back(current->data);
+    }
+    return result;
 }
 
 
