@@ -680,6 +680,94 @@ vector<int> nodes_fromDistanceK(Node* root, Node* target, int k) {         // al
 }
 
 
+int findMaxDistance(unordered_map<Node*, Node*>& mpp, Node* target) {
+    queue<Node*> q;
+    q.push(target);
+    unordered_map<Node*, int> vis;
+    vis[target] = 1;
+    int maxi = 0;
+
+    while (!q.empty()) {
+        int sz = q.size();
+        int fl = 0;
+        for (int i = 0; i < sz; i++) {
+            auto node = q.front();
+            q.pop();
+            if (node->left && !vis[node->left]) {
+                fl = 1;
+                vis[node->left] = 1;
+                q.push(node->left);
+            }
+            if (node->right && !vis[node->right]) {
+                fl = 1;
+                vis[node->right] = 1;
+                q.push(node->right);
+            }
+            if (mpp[node] && !vis[mpp[node]]) {
+                fl = 1;
+                vis[mpp[node]] = 1;
+                q.push(mpp[node]);
+            }
+        }
+        if (fl) maxi++;
+    }
+    return maxi;
+}
+Node* bfsToMapParents(Node* root, unordered_map<Node*, Node*>& mpp, int start) {
+    queue<Node*> q;
+    q.push(root);
+    Node* res = nullptr;
+
+    while (!q.empty()) {
+        Node* node = q.front();
+        q.pop();
+        if (node->data == start)
+            res = node;
+        if (node->left) {
+            mpp[node->left] = node;
+            q.push(node->left);
+        }
+        if (node->right) {
+            mpp[node->right] = node;
+            q.push(node->right);
+        }
+    }
+    return res;
+}
+int timeToBurnTree(Node* root, int start) {
+    unordered_map<Node*, Node*> mpp;
+    Node* target =
+        bfsToMapParents(root, mpp, start);
+    if (target == nullptr) return 0;
+    int maxi = findMaxDistance(mpp, target);
+    return maxi;
+}
+
+
+int leftHeight(Node* root) {
+    int hight = 0;
+    while(root) {
+        hight++;
+        root = root->left;
+    }
+    return hight;
+}
+int rightHeight(Node* root) {
+    int hight = 0;
+    while(root) {
+        hight++;
+        root = root->right;
+    }
+    return hight;
+}
+int countNodes(Node* root) {        // optimal way for Complete Binary Tree
+    if(root == NULL) return 0;
+    int lh = leftHeight(root->left);
+    int rh = rightHeight(root->right);
+
+    if(lh == rh) return (1<<lh) - 1;
+    return 1 + countNodes(root->left) + countNodes(root->right);
+}
 
 
 
