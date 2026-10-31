@@ -769,6 +769,49 @@ int countNodes(Node* root) {        // optimal way for Complete Binary Tree
     return 1 + countNodes(root->left) + countNodes(root->right);
 }
 
+// Condition for construct Unique BT:
+// If you are given a preorder and postorder, you cannot construct a unique binary tree.
+// Inorder is very important to create a unique BT. 
+// So from Inorder + Preorder, Inorder + Postorder, we can construct unique BT.
+ 
+Node* buildTree(vector<int> &preorder, int preStart, int preEnd, vector<int> &inorder, int inStart, int inEnd, map<int,int> &mp) {
+    if(preStart > preEnd || inStart > inEnd) return NULL;
+    Node* root = new Node(preorder[preStart]);
+    
+    int inRoot = mp[root->data];
+    int numsLeft = inRoot - inStart;
+    root->left = buildTree(preorder, preStart + 1, preStart + numsLeft, inorder, inStart, inRoot - 1, mp);
+    root->right = buildTree(preorder, preStart + numsLeft + 1, preEnd, inorder, inRoot + 1, inEnd, mp);
+    return root;
+}
+Node* buildTree(vector<int> inorder, vector<int> preorder) {
+    map<int,int> mp;
+    for(int i = 0; i < inorder.size(); i++) {
+        mp[inorder[i]] = i;
+    }
+    Node* root = buildTree(preorder, 0, preorder.size() - 1, inorder, 0, inorder.size() - 1, mp);
+    return root;
+}
+
+
+Node* buildTreePostIn(vector<int> &postorder, int ps, int pe, vector<int> &inorder, int is, int ie, map<int,int> &mp) {
+    if(ps > pe || is > ie) return NULL;
+    Node* root = new Node(postorder[pe]);
+    int inRoot = mp[postorder[pe]];
+    int numsLeft = inRoot - is;
+
+    root->left = buildTreePostIn(postorder, ps, ps + numsLeft - 1, inorder, is, inRoot - 1, mp);
+    root->right = buildTreePostIn(postorder, ps + numsLeft, pe - 1, inorder, inRoot + 1, ie, mp);
+    return root;
+}
+Node* buildTreePostIn(vector<int> inorder, vector<int> postorder) {
+    if(inorder.size() != postorder.size() || inorder.empty()) return NULL;
+    map<int,int> mp;
+    for(int i=0; i<inorder.size(); i++) mp[inorder[i]] = i;
+    return buildTreePostIn(postorder, 0, postorder.size() - 1, inorder, 0, inorder.size() - 1, mp);
+}
+
+
 
 
 int main() {
