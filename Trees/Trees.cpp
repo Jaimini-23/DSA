@@ -865,6 +865,99 @@ Node* deserialize(string data) {
 }
 
 
+vector<int> morrisTraversal(Node* root) {                 // inorder
+    vector<int> inorder;
+    Node* curr = root;
+    while(curr != NULL) {
+        if(curr->left == NULL) {
+            inorder.push_back(curr->data);
+            curr = curr->right;
+        }
+        else {
+            Node* prev = curr->left;
+            while(prev->right && prev->right != curr) prev = prev->right;
+            if(prev->right == NULL) {
+                prev->right = curr;
+                curr = curr->left;
+            }
+            else {
+                prev->right = NULL;
+                inorder.push_back(curr->data);
+                curr = curr->right;
+            }
+        }
+    }
+    return inorder;
+}
+
+
+vector<int> morrisTraversal(Node* root) {                 // preorder
+    vector<int> preorder;
+    Node* curr = root;
+    while(curr != NULL) {
+        if(curr->left == NULL) {
+            preorder.push_back(curr->data);
+            curr = curr->right;
+        }
+        else {
+            Node* prev = curr->left;
+            while(prev->right && prev->right != curr) prev = prev->right;
+            if(prev->right == NULL) {
+                prev->right = curr;
+                preorder.push_back(curr->data);
+                curr = curr->left;
+            }
+            else {
+                prev->right = NULL;
+                curr = curr->right;
+            }
+        }
+    }
+    return preorder;
+}
+
+
+void flatten(Node* root, Node* &prev) {
+    if(root == NULL) return;
+    flatten(root->right,prev);
+    flatten(root->left,prev);
+
+    root->right = prev;
+    root->left = NULL;
+    prev = root;
+}
+void flattenIntoLL(Node* root) {
+    // Node* prev = NULL;
+    // flatten(root,prev);
+
+    // iterative
+    // if(root == NULL) return;
+    // stack<Node*> st;
+    // st.push(root);
+    // while(!st.empty()) {
+    //     Node* curr = st.top();
+    //     st.pop();
+    //     if(curr->right) st.push(curr->right);
+    //     if(curr->left) st.push(curr->left);
+    //     if(!st.empty()) curr->right = st.top();
+    //     curr->left = NULL;
+    // }
+
+    // morris traversal
+    Node* curr = root;
+    while(curr != NULL) {
+        if(curr->left != NULL) {
+            Node* prev = curr->left;
+            while(prev->right != NULL) prev = prev->right;
+            prev->right = curr->right;
+            curr->right = curr->left;
+            curr->left = NULL;
+        }
+        curr = curr->right;
+    }
+}
+
+
 
 
 int main() {
