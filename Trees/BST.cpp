@@ -61,6 +61,94 @@ int floor(Node* root, int x) {        // val <= x
 }
 
 
+Node* insertAtLeaf(Node* root, int x) {
+    if(root == NULL) return new Node(x);
+    Node* curr = root;
+    while(true) {
+        if(x >= curr->data) {
+            if(curr->right != NULL) curr = curr->right;
+            else {
+                curr->right = new Node(x);
+                break;
+            }
+        }
+        else {
+            if(curr->left != NULL) curr = curr->left;
+            else {
+                curr->left = new Node(x);
+                break;
+            }
+        }
+    }
+    return root;
+}
+
+
+Node* deleteNode(Node* root, int key) {          // Recursive Approach
+    if(root == NULL) return NULL;
+    if(key < root->data) root->left = deleteNode(root->left, key);
+    else if(key > root->data) root->right = deleteNode(root->right, key);
+    else {
+        // Case 1: No left child
+        if(root->left == NULL) {
+            Node* temp = root->right;
+            delete root;
+            return temp;
+        }
+        // Case 2: No right child
+        if(root->right == NULL) {
+            Node* temp = root->left;
+            delete root;
+            return temp;
+        }
+        // Case 3: Two children
+        Node* successor = root->right;
+        while(successor->left != NULL) successor = successor->left;
+        root->data = successor->data;
+        root->right = deleteNode(root->right, successor->data);
+    }
+    return root;
+}
+
+
+Node* findLastRight(Node* root) {
+    if(root->right == NULL) return root;
+    return findLastRight(root->right);
+}
+Node* helper(Node* root) {
+    // it attaches the right subtree to the rightmost node of the left subtree.
+    if(root->left == NULL) return root->right;
+    else if(root->right == NULL) return root->left;
+    Node* rightChild = root->right;
+    Node* lastRight = findLastRight(root->left);
+    lastRight->right = rightChild;
+
+    return root->left;
+}
+Node* deleteNode(Node* root, int key) {            // Iterative Approach
+    if(root == NULL) return NULL;
+    if(root->data == key) return helper(root);
+    Node* node = root;
+    while(root != NULL) {
+        if(root->data > key) {
+            if(root->left != NULL && root->left->data == key) {
+                root->left = helper(root->left);
+                break;
+            }
+            else root = root->left;
+        }
+        else {
+            if(root->right != NULL && root->right->data == key) {
+                root->right = helper(root->right);
+                break;
+            }
+            else root = root->right;
+        }
+    }
+    return node;
+}
+
+
 
 
 int main() {
