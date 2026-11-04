@@ -307,6 +307,63 @@ class BSTIterator {
 };
 
 
+bool twoSum(Node* root, int k) {
+    // TC: O(n) + O(n) and SC: O(n)
+    // convert the BST into a sorted vector using inorder traversal, then use Binary Search to find the sum.
+
+    // TC: O(n) and SC: 2 * O(h)
+    // see classes below
+}
+class BSTIterator {
+    stack<Node*> st;
+    bool reverse = true;
+
+public:
+    BSTIterator(Node* root, bool isReverse) {
+        reverse = isReverse;
+        pushAll(root);
+    }
+
+    bool hasNext() {
+        return !st.empty();
+    }
+
+    int next() {
+        Node* temp = st.top();
+        st.pop();
+        if(!reverse) pushAll(temp->right);
+        else pushAll(temp->left);
+        return temp->data;
+    }
+
+private:
+    void pushAll(Node* node) {
+        for(; node != NULL;) {
+            st.push(node);
+            if(reverse == true) node = node->right;
+            else node = node->left;
+        }
+    }
+};
+class solution {
+public:
+    bool findTarget(Node* root, int k) {
+        if(!root) return false;
+        BSTIterator l(root, false);     // next
+        BSTIterator r(root, true);       // before
+
+        int i = l.next();
+        int j = r.next();
+        while(i < j) {
+            if(i + j == k) return true;
+            else if(i + j < k) i = l.next();
+            else j = r.next();
+        }
+        return false;
+    }
+};
+
+
 
 
 int main() {
