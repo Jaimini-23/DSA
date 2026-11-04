@@ -238,6 +238,50 @@ Node* LCA(Node* root, Node* p, Node* q) {
 }
 
 
+Node* build(vector<int> &preorder, int &i, int bound) {
+    if(i == preorder.size() || preorder[i] > bound) return NULL;
+    Node* newNode = new Node(preorder[i++]);
+    newNode->left = build(preorder, i, newNode->data);
+    newNode->right = build(preorder, i, bound);
+    return newNode;
+}
+Node* constructBST(vector<int> preorder) {         // construct BST from given preorder
+    // TC: O(nlogn + n) and SC: O(n)
+    // sort that preorder and store in different vector as inorder
+    // then construct BT with both of them, resultant BT is the required BST
+
+    // TC: O(n) and SC: O(1)
+    int i = 0;
+    return build(preorder, i, INT_MAX);
+}
+
+
+Node* inorderSuccessor(Node* root, Node* p) {
+    Node* successor = NULL;
+    while(root != NULL) {
+        if(p->data >= root->data) root = root->right;
+        else {
+            successor = root;
+            root = root->left;
+        }
+    }
+    return successor;
+}
+
+
+Node* inorderPredecessor(Node* root, Node* p) {
+    Node* predecessor = NULL;
+    while(root != NULL) {
+        if(p->data <= root->data) root = root->left;
+        else {
+            predecessor = root;
+            root = root->right;
+        }
+    }
+    return predecessor;
+}
+
+
 
 
 int main() {
