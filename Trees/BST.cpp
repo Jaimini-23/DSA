@@ -6,6 +6,7 @@ using namespace std;
 // left->data <= root->data < right->data, if duplicates are allowed or we take a <node*,freq> data type at nodes
 // left subtree and right subtree should also be a BST
 // Height of BST: log2(n) in mostly cases
+// for BST, inorder will always be in sorted form
 
 // The Code Structure (Defining a Node)
 struct Node {
@@ -149,8 +150,73 @@ Node* deleteNode(Node* root, int key) {            // Iterative Approach
 }
 
 
+void inorder(Node* root, int k, int &ans, int &count) {
+    if(root == NULL || count >= k) return;
+    inorder(root->left, k, ans, count);
+    if(count >= k) return;
+    count++;
+    if(count == k) {
+        ans = root->data;
+        return;
+    }
+    inorder(root->right, k , ans, count);
+}
+int kthSmallest(Node* root, int k) {
+    int ans = -1;
+    int count = 0;
+    inorder(root, k, ans, count);
+    return ans;
+}
+
+
+int countNodes(Node* root) {
+    if(root == NULL) return 0;
+    return 1 + countNodes(root->left) + countNodes(root->right);
+}
+void inorder(Node* root, int k, int &ans, int &count) {
+    if(root == NULL || count >= k) return;
+    inorder(root->left, k, ans, count);
+    if(count >= k) return;
+    count++;
+    if(count == k) {
+        ans = root->data;
+        return;
+    }
+    inorder(root->right, k , ans, count);
+}
+int kthLargest(Node* root, int k) {            // kth largest = (n - k + 1) smallest
+    int n = countNodes(root);
+    if(k > n || k <= 0) return -1;
+    int count = 0, ans = -1;
+    inorder(root, n - k + 1, ans, count);
+    return ans;
+}
+
+
+void reverseInorder(Node* root, int k, int &count, int &ans) {
+    if(root == NULL || count >= k) return;
+    reverseInorder(root->right, k, count, ans);
+    if(count >= k) return;
+    count++;
+    if(count == k) {
+        ans = root->data;
+        return;
+    }
+    reverseInorder(root->left, k, count, ans);
+}
+int kthLargest(Node* root, int k) {
+    int count = 0, ans = -1;
+    reverseInorder(root, k, count, ans);
+    return ans;
+}
+
+
 
 
 int main() {
 
 }
+
+
+
+
