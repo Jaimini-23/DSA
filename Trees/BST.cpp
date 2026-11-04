@@ -211,6 +211,33 @@ int kthLargest(Node* root, int k) {
 }
 
 
+bool solve(Node* root, long long mini, long long maxi) {
+    if(root == NULL) return true;
+    if(root->data <= mini || root->data >= maxi) return false;
+    return solve(root->left, mini, root->data) &&
+        solve(root->right, root->data, maxi);
+}
+bool isBST(Node* root) {
+    return solve(root, LLONG_MIN, LLONG_MAX);
+}
+
+
+Node* LCA(Node* root, Node* p, Node* q) {
+    // recursive
+    // if(p->data < root->data && q->data < root->data) return LCA(root->left, p, q);
+    // else if(p->data > root->data && q->data > root->data) return LCA(root->right, p, q);
+    // return root;
+
+    // iterative
+    while(root) {
+        if(p->data < root->data && q->data < root->data) root = root->left;
+        else if(p->data > root->data && q->data > root->data) root = root->right;
+        else return root;
+    }
+    return NULL;
+}
+
+
 
 
 int main() {
