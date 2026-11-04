@@ -282,6 +282,31 @@ Node* inorderPredecessor(Node* root, Node* p) {
 }
 
 
+class BSTIterator {
+    private: stack<Node*> st;
+    public:
+        BSTIterator(Node* root) {
+            pushAll(root);
+        }
+
+        bool hasNext() {
+            return !st.empty();
+        }
+
+        int next() {
+            Node* temp = st.top();
+            st.pop();
+            pushAll(temp->right);
+            return temp->data;
+        }
+
+    private:
+        void pushAll(Node* node) {
+            for(; node != NULL; st.push(node), node = node->left);
+        }
+};
+
+
 
 
 int main() {
