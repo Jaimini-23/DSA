@@ -401,10 +401,10 @@ public:
 class NodeValue {
 public:
     int maxNode, minNode, maxSize;
-    NodeValue(int minNode, int maxNode, int maxSize) {
-        this->maxNode = maxNode;
-        this->minNode = minNode;
-        this->maxSize = maxSize;
+    NodeValue(int minNode, int maxNode, int maxSize) {              // mn = minnode, mx = maxNode, sz = maxSize
+        this->maxNode = maxNode;                                 // can avoid this-> 
+        this->minNode = minNode;                            // or can use initializer: 
+        this->maxSize = maxSize;                                      // : minNode(mn), maxNode(mx), maxSize(sz) {}
     }
 };
 class Solution {
