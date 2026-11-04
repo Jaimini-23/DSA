@@ -2,8 +2,8 @@
 using namespace std;
 
 
-// left->data < root->data < right->data, if duplicates are not allowed
-// left->data <= root->data < right->data, if duplicates are allowed or we take a <node*,freq> data type at nodes
+// left < root < right, if duplicates are not allowed
+// left <= root < right, if duplicates are allowed or we take a <node*,freq> data type at nodes
 // left subtree and right subtree should also be a BST
 // Height of BST: log2(n) in mostly cases
 // for BST, inorder will always be in sorted form
@@ -394,6 +394,48 @@ public:
         inorder(root);
         if(first && last) swap(first->data, last->data);
         else if(first && middle) swap(first->data, middle->data);
+    }
+};
+
+
+class NodeValue {
+public:
+    int maxNode, minNode, maxSize;
+    NodeValue(int minNode, int maxNode, int maxSize) {
+        this->maxNode = maxNode;
+        this->minNode = minNode;
+        this->maxSize = maxSize;
+    }
+};
+class Solution {
+private:
+    NodeValue largestBSTSubtreeHelper(Node* root) {
+        // Empty tree is a BST of size 0
+        if(!root) return NodeValue(INT_MAX, INT_MIN, 0);
+
+        // Get information from left and right subtrees
+        auto left = largestBSTSubtreeHelper(root->left);
+        auto right = largestBSTSubtreeHelper(root->right);
+
+        // Check whether current subtree is a BST
+        if(left.maxNode < root->data && root->data < right.minNode) {
+            return NodeValue(
+                min(root->data, left.minNode),
+                max(root->data, right.maxNode),
+                left.maxSize + right.maxSize + 1
+            );
+        }
+
+        // Current subtree is NOT a BST
+        return NodeValue(
+            INT_MIN,
+            INT_MAX,
+            max(left.maxSize, right.maxSize)
+        );
+    }
+public:
+    int largestBSTSubtree(Node* root) {
+        return largestBSTSubtreeHelper(root).maxSize;
     }
 };
 
