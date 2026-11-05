@@ -8,7 +8,7 @@ using namespace std;
 
 // Connected graph: Every pair of vertices has a path between them
 // Component: A maximal connected part of a graph
-// Degree: Number of edges connected to a vertex in an undirected graph
+// Degree: Number of edges connected to a vertex in an undirected graph (total in graph = 2 * edges)
 // Indegree: Number of incoming edges in a directed graph
 // Outdegree: Number of outgoing edges in a directed graph
 // Path: contains nodes and each pf node is reachable(adjacent nodes must have an edge)
@@ -83,8 +83,27 @@ vector<int> bfs(int n, vector<int> adj[]) {
                 q.push(it);
             }
         }
+        ans.push_back(node);
     }
     return ans;
+}
+
+
+void dfs(int node, vector<int> adj[], int vis[], vector<int> &ls) {
+    // TC: O(n) + O(2 * edge)_for Undirected graph and SC: O(n) + O(n) + O(n) = O(n)
+    vis[node] = 1;
+    ls.push_back(node);
+    // traversal all its neighbours
+    for(auto it : adj[node]) {
+        if(!vis[it]) dfs(it, adj, vis, ls);
+    }
+}
+vector<int> dfsOfGraph(int n, vector<int> adj[]) {
+    int vis[n] = {0};
+    int start = 0;
+    vector<int> ls;
+    dfs(start, adj, vis, ls);
+    return ls;
 }
 
 
