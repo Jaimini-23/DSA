@@ -46,24 +46,18 @@ int main() {
 }
 
 
-// Connected Components: maximal connected subgraph of an undirected graph
-// How to find connected components using DFS? : Create a visited array initialized with false. Traverse all vertices using a loop.
-void dfs(int node, vector<int> adj[], vector<int> &vis) {
-    vis[node] = 1;
-    for(auto it : adj[node]) {
-        if(!vis[it]) dfs(it, adj, vis);
-    }
-}
-int countComponent(int v, vector<int> adj[]) {
-    vector<int> vis(v,0);
-    int count = 0;
-    for(int i = 0; i < v; i++) {
-        if(!vis[i]) {
-            count++;
-            dfs(i, adj, vis);
+vector<vector<int>> matrixToList(vector<vector<int>>& adj) {
+    int n = adj.size();
+    vector<vector<int>> adjList(n);
+    for(int i = 0; i < n; i++) {
+        for(int j = 0; j < n; j++) {
+            if(adj[i][j] == 1 && i != j) {
+                adjList[i].push_back(j);
+                adjList[j].push_back(i);
+            }
         }
     }
-    return count;
+    return adjList;
 }
 
 
@@ -104,6 +98,72 @@ vector<int> dfsOfGraph(int n, vector<int> adj[]) {
     vector<int> ls;
     dfs(start, adj, vis, ls);
     return ls;
+}
+
+
+// Connected Components: maximal connected subgraph of an undirected graph
+// How to find connected components using DFS? : Create a visited array initialized with false. Traverse all vertices using a loop.
+void dfs(int node, vector<int> adj[], vector<int> &vis) {
+    vis[node] = 1;
+    for(auto it : adj[node]) {
+        if(!vis[it]) dfs(it, adj, vis);
+    }
+}
+int countComponent(int v, vector<int> adj[]) {
+    vector<int> vis(v,0);
+    int count = 0;
+    for(int i = 0; i < v; i++) {
+        if(!vis[i]) {
+            count++;
+            dfs(i, adj, vis);
+        }
+    }
+    return count;
+}
+
+
+void bfSearch(int row, int col, vector<vector<int>> &vis, vector<vector<char>> grid) {
+    vis[row][col] = 1;
+    queue<pair<int,int>> q;
+    q.push({row,col});
+    int n = grid.size();
+    int m = grid[0].size();
+
+    while(!q.empty()) {
+        int row = q.front().first;
+        int col = q.front().second;
+        q.pop();
+        
+        // traverse in the neighbours and mark them if its a land
+        for(int delrow = -1; delrow <= 1; delrow++) {
+            for(int delcol = -1; delcol <= 1; delcol++) {
+                int newRow = row + delrow;
+                int newCol = col + delcol;
+
+                if(newRow >= 0 && newRow < n && newCol >= 0 && newCol < m 
+                    && grid[newRow][newCol] == '1' && !vis[newRow][newCol]) {
+                        vis[newRow][newCol] = 1;
+                        q.push({newRow,newCol});
+                    }
+            }
+        }
+    }
+}
+int numsIsLands(vector<vector<char>> &grid) {
+    // TC: O(n^2) + O(n^2) and SC: O(n^2) + O(n^2)
+    int n = grid.size();
+    int m = grid[0].size();
+    vector<vector<int>> vis(n, vector<int> (m, 0));
+    int cnt = 0;
+    for(int row = 0; row < n; row++) {
+        for(int col = 0; col < m; col++) {
+            if(!vis[row][col] && grid[row][col] == '1') {
+                cnt++;
+                bfSearch(row, col, vis,grid);
+            }
+        }
+    }
+    return cnt;
 }
 
 
