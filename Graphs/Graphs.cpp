@@ -14,7 +14,7 @@ using namespace std;
 // Path: contains nodes and each pf node is reachable(adjacent nodes must have an edge)
 
 // To represent graph: Adjacency Matrix, Adjacency List, Edge List.
-// Adjacency Matrix
+// Adjacency Matrix (SC: O(n^2))
 int main() {
     int n, m;
     cin >> n >> m;
@@ -29,4 +29,18 @@ int main() {
     return 0;
 }
 
+
+// Adjacency List (SC: O(2 * edge) for Undirected and O(egde) for Directed)
+int main() {
+    int n, m;
+    cin >> n >> m;
+    vector<int> adj[n + 1];
+    for(int i = 0; i < m; i++) {
+        int u, v;
+        cin >> u >> v;
+        adj[u].push_back(v);           // for weighted graph push pair<int,int> instead of int, one is for adjacent node and another one is for weight
+        adj[v].push_back(u);           // no need of this for directed graph
+    }
+    return 0;
+}
 
