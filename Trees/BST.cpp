@@ -1,12 +1,12 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-
 // left < root < right, if duplicates are not allowed
 // left <= root < right, if duplicates are allowed or we take a <node*,freq> data type at nodes
 // left subtree and right subtree should also be a BST
 // Height of BST: log2(n) in mostly cases
 // for BST, inorder will always be in sorted form
+
 
 // The Code Structure (Defining a Node)
 struct Node {
@@ -25,7 +25,7 @@ struct Node {
 
 Node* searchNode(Node* root, int x) {
     // TC: height of BST O(log2(n))
-    while(root != NULL || root->data != x) {
+    while(root != NULL && root->data != x) {
         root = x < root->data ? root->left : root->right;
     }
     return root;
