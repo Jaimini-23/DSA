@@ -196,11 +196,13 @@ vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int ne
 
 
 int rottenOranges(vector<vector<int>>& grid) {
+    // TC: O(n * m) and SC: O(n * m)
     // 0 -> no orange, 1 -> fresh orange, 2 -> rotten orange
     int time = 0;
     int n = grid.size();
     int m = grid[0].size();
     vector<vector<int>> vis = grid;
+    int cntFresh = 0;
     
     // {{r,c},t}
     queue<pair<pair<int,int>,int>> q;
@@ -209,8 +211,11 @@ int rottenOranges(vector<vector<int>>& grid) {
             if(grid[row][col] == 2) {
                 q.push({{row,col},0});
             }
+
+            if(grid[row][col] == 1) cntFresh++;
         }
     }
+    int cnt = 0;
     while(!q.empty()) {
         int r = q.front().first.first;
         int c = q.front().first.second;
@@ -228,17 +233,72 @@ int rottenOranges(vector<vector<int>>& grid) {
                     && vis[nrow][ncol] == 1) {
                         vis[nrow][ncol] = 2;
                         q.push({{nrow,ncol},t + 1});
+                        cnt++;
                     }
             }
         }
     }
     // check if all oranges get converted or not
-    for(int i = 0; i < n; i++) {
-        for(int j = 0; j < m; j++) {
-            if(vis[i][j] != 2 && grid[i][j] == 1) return -1;
+    // for(int i = 0; i < n; i++) {
+    //     for(int j = 0; j < m; j++) {
+    //         if(vis[i][j] != 2 && grid[i][j] == 1) return -1;
+    //     }
+    // }
+    if(cntFresh != cnt) return -1;
+    return time;
+}
+
+
+bool bfsDetect(int src,vector<int> adj[], int vis[]) {
+    vis[src] = 1;
+    queue<pair<int,int>> q;
+    q.push({src,-1});
+    while(!q.empty()) {
+        int node = q.front().first;
+        int parent = q.front().second;
+        q.pop();
+
+        for(auto adjacency: adj[node]) {
+            if(!vis[adjacency]) {
+                vis[adjacency] = 1;
+                q.push({adjacency,node});
+            }
+            else if(parent != adjacency) return true;     // if already visited, check if node's neighbour and parent is not equal (they should be two different nodes otherwise parent and node (these two) will get treated as cycle)
+        }                                                    // if not equal that means cycle detected
+    }
+    return false;
+}
+bool isCycle(int n, vector<int> adj[]) {     // in an undirected graph
+    // TC: O(n) + O(2E) + O(n) and SC: O(n) + O(n)
+    int vis[n] = {0};
+    for(int i = 0 ; i < n; i++) {
+        if(!vis[i]) {  
+            if(bfsDetect(i, adj, vis)) return true;       // cannot use detect(adj[0], adj, vis) because there can be disconnected components of graph
         }
     }
-    return time;
+    return false;
+}
+
+
+bool dfsDetect(int node, int parent, int vis[], vector<int> adj[]) {
+    vis[node] = 1;
+    for(auto adjacentNode: adj[node]) {
+        if(!vis[adjacentNode]) {
+            if(dfsDetect(adjacentNode, node, vis, adj) == true) return true;         // if one dfs return true, return true for all remaining recursive dfs or say question
+        }
+        else if(adjacentNode != parent) return true;
+    }
+    return false;
+}
+bool isCycle(int n, vector<int> adj[]) {
+    // TC: O(n) + O(2E) + O(n) and SC: O(n) + O(n)
+    int vis[n] = {0};
+    for(int i = 0; i < n; i++) {
+        if(!vis[i]) {
+            if(dfsDetect(i, -1, vis, adj) == true) return true;
+        }
+    }
+    return false;
 }
 
 
