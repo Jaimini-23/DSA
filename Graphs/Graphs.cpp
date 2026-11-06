@@ -137,7 +137,7 @@ void bfSearch(int row, int col, vector<vector<int>> &vis, vector<vector<char>> &
         // traverse in the neighbours and mark them if its a land
         for(int delrow = -1; delrow <= 1; delrow++) {
             for(int delcol = -1; delcol <= 1; delcol++) {
-                int newRow = row + delrow;
+                int newRow = row + delrow;                             // if(abs(delRow) + abs(delCol) != 1) continue;   add this line for 4 directions (horizontal and verticle only) not 8
                 int newCol = col + delcol;
 
                 if(newRow >= 0 && newRow < n && newCol >= 0 && newCol < m 
@@ -192,6 +192,53 @@ vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int ne
     int delCol[] = {0, 1, 0, -1};
     dfs(sr, sc, ans, image, newColor, delRow, delCol, iniColor);
     return ans;
+}
+
+
+int rottenOranges(vector<vector<int>>& grid) {
+    // 0 -> no orange, 1 -> fresh orange, 2 -> rotten orange
+    int time = 0;
+    int n = grid.size();
+    int m = grid[0].size();
+    vector<vector<int>> vis = grid;
+    
+    // {{r,c},t}
+    queue<pair<pair<int,int>,int>> q;
+    for(int row = 0; row < n; row++) {
+        for(int col = 0; col < m; col++) {
+            if(grid[row][col] == 2) {
+                q.push({{row,col},0});
+            }
+        }
+    }
+    while(!q.empty()) {
+        int r = q.front().first.first;
+        int c = q.front().first.second;
+        int t = q.front().second;
+        q.pop();
+        time = max(time,t);
+
+        for(int delrow = -1; delrow <= 1; delrow++) {
+            for(int delcol = -1; delcol <= 1; delcol++) {
+                if(abs(delrow) + abs(delcol) != 1) continue;
+                int nrow = r + delrow;
+                int ncol = c + delcol;
+
+                if(nrow >= 0 && nrow < n && ncol >= 0 && ncol < m 
+                    && vis[nrow][ncol] == 1) {
+                        vis[nrow][ncol] = 2;
+                        q.push({{nrow,ncol},t + 1});
+                    }
+            }
+        }
+    }
+    // check if all oranges get converted or not
+    for(int i = 0; i < n; i++) {
+        for(int j = 0; j < m; j++) {
+            if(vis[i][j] != 2 && grid[i][j] == 1) return -1;
+        }
+    }
+    return time;
 }
 
 
