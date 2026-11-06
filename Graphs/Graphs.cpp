@@ -308,7 +308,7 @@ vector<vector<int>> distanceOfNearest_cellHaving1(vector<vector<int>> grid) {
     vector<vector<int>> vis(n, vector<int> (m, 0));
     vector<vector<int>> dist = grid;
     queue<pair<pair<int,int>,int>> q;
-    for(int i = 0; i < n; i++) {
+    for(int i = 0; i < n; i++) {          // Multi Source BFS
         for(int j = 0; j < m; j++) {
             if(grid[i][j] == 1) {
                 q.push({{i,j},0});
@@ -338,6 +338,48 @@ vector<vector<int>> distanceOfNearest_cellHaving1(vector<vector<int>> grid) {
         }
     }
     return dist;
+}
+
+
+void dfs(int row, int col, vector<vector<int>> &vis, vector<vector<char>> &mat) {
+    vis[row][col] = 1;
+    int n = mat.size();
+    int m = mat[0].size();
+    for(int delrow = -1; delrow <= 1; delrow++) {
+        for(int delcol = -1; delcol <= 1; delcol++) {
+            if(abs(delrow) + abs(delcol) != 1) continue;
+            int nrow = row + delrow;
+            int ncol = col + delcol;
+
+            if(nrow >= 0 && nrow < n && ncol >= 0 && ncol < m &&
+               !vis[nrow][ncol] && mat[nrow][ncol] == 'O') {
+                dfs(nrow, ncol, vis, mat);
+            }
+        }
+    }
+}
+void surroundedRegions(int n, int m, vector<vector<char>> &mat) {        // mark O's surrounded by X's
+    // start from the border O's and mark them that they cannot be converted and convert the remaining O's
+    vector<vector<int>> vis(n, vector<int>(m, 0));
+    // First and last row
+    for(int j = 0; j < m; j++) {
+        if(!vis[0][j] && mat[0][j] == 'O') dfs(0, j, vis, mat);
+        if(!vis[n-1][j] && mat[n-1][j] == 'O') dfs(n-1, j, vis, mat);
+    }
+    // First and last column
+    for(int i = 0; i < n; i++) {
+        if(!vis[i][0] && mat[i][0] == 'O') dfs(i, 0, vis, mat);
+        if(!vis[i][m-1] && mat[i][m-1] == 'O') dfs(i, m-1, vis, mat);
+    }
+
+    // Convert surrounded O into X
+    for(int i = 0; i < n; i++) {
+        for(int j = 0; j < m; j++) {
+            if(!vis[i][j] && mat[i][j] == 'O') {
+                mat[i][j] = 'X';
+            }
+        }
+    }
 }
 
 
