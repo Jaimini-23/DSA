@@ -505,5 +505,30 @@ bool isBipartite(int v, vector<int> adj[]) {
 }
 
 
+bool dfsCheck(int node, vector<int> adj[], int vis[], int pathVis[]) {
+    vis[node] = 1;
+    pathVis[node] = 1;
+    for(auto it: adj[node]) {
+        if(!vis[it]) {
+            if(dfsCheck(it, adj, vis, pathVis) == true) return true;
+        }
+        // if the node has been previously visited but it has to be visited on the same path
+        else if(pathVis[it]) return true;
+    }
+    pathVis[node] = 0;    // Once DFS finishes exploring all neighbours of the current node, remove it from the current recursion path. This is called backtracking.
+    return false;
+}
+bool isCyclic(int n, vector<int> adj[]) {            // in an directed graph
+    int vis[n] = {0};
+    int pathVis[n] = {0};
+    for(int i = 0; i < n; i++) {
+        if(!vis[i]) {
+            if(dfsCheck(i, adj, vis, pathVis) == true) return true;
+        }
+    }
+    return false;
+}          
+
+
 
 
