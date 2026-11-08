@@ -445,6 +445,7 @@ void dfsIslands(int row, int col, vector<vector<int>> &vis, vector<vector<int>> 
     }
 }
 int countDistinctIslands(vector<vector<int>> &grid) {
+    // TC: O(n * m) * log(set length)_setInsert + O(n * m *4)_dfs
     int n = grid.size();
     int m = grid[0].size();
     vector<vector<int>> vis(n, vector<int>(m, 0));
@@ -459,6 +460,48 @@ int countDistinctIslands(vector<vector<int>> &grid) {
         }
     }
     return st.size();
+}
+
+
+// Bipartite graph: can divide all vertices into two disjoint sets such that no two adjacent vertices belong to the same set
+// Non cyclic and even cyclick graph is always bipartite and odd cyclic is not bipartite
+bool check(int start, int v, vector<int> adj[], int color[]) {          // by bfs
+    queue<int> q;
+    q.push(start);
+    color[start] = 0;
+    while(!q.empty()) {
+        int node = q.front();
+        q.pop();
+        for(auto it: adj[node]) {
+            if(color[it] == -1) {
+                color[it] = !color[node];
+                q.push(it);
+            }
+            else if(color[it] == color[node]) return false;
+        }
+    }
+    return true;
+}
+bool dfsBipartite(int node, int col, vector<int> adj[], int color[]) {             // by dfs
+    color[node] = col;
+    for(auto it: adj[node]) {
+        if(color[it] == -1) {
+            if(dfsBipartite(it, !col, adj, color) == false) return false;
+        }
+        else if(color[it] == col) return false;
+    }
+    return true;
+}
+bool isBipartite(int v, vector<int> adj[]) {
+    int color[v];
+    for(int i = 0; i < v; i++) color[i] = -1;
+    for(int i = 0; i < v; i++) {
+        if(color[i] == -1) {
+            if(check(i, v, adj, color) == false) return false;         // by bfs
+            if(dfsBipartite(i, 0, adj, color) == false) return false;         // by dfs
+        }
+    }
+    return true;
 }
 
 
