@@ -520,14 +520,74 @@ bool dfsCheck(int node, vector<int> adj[], int vis[], int pathVis[]) {
 }
 bool isCyclic(int n, vector<int> adj[]) {            // in an directed graph
     int vis[n] = {0};
-    int pathVis[n] = {0};
+    int pathVis[n] = {0};                              // can also do in one array by let marking vis as 1 and for pathVis as 2
     for(int i = 0; i < n; i++) {
         if(!vis[i]) {
             if(dfsCheck(i, adj, vis, pathVis) == true) return true;
         }
     }
     return false;
-}          
+}   
+
+
+bool dfsCheck(int node, vector<int> adj[], int vis[], int pathVis[], int check[]) {
+    vis[node] = 1;
+    pathVis[node] = 1;
+    for(auto it: adj[node]) {
+        if(!vis[it]) {
+            if(dfsCheck(it, adj, vis, pathVis, check) == true) {
+                check[node] = 0;
+                return true;
+            }
+        }
+        // if the node has been previously visited but it has to be visited on the same path
+        else if(pathVis[it]) {
+            check[node] = 0;
+            return true;
+        }
+    }
+    check[node] = 1;
+    pathVis[node] = 0;    // Once DFS finishes exploring all neighbours of the current node, remove it from the current recursion path. This is called backtracking.
+    return false;
+}
+vector<int> eventualSafeNodes(int n, vector<int> adj[]) {            // in an directed graph
+    int vis[n] = {0};
+    int pathVis[n] = {0};
+    int check[n] = {0};
+    vector<int> safeNodes;
+    for(int i = 0; i < n; i++) {
+        if(!vis[i]) {
+            dfsCheck(i, adj, vis, pathVis, check);
+        }
+    }
+
+    for(int i = 0; i < n; i++) {
+        if(check[i] == 1) safeNodes.push_back(i);
+    }
+    return safeNodes;
+} 
+
+
+void dfsTopo(int node, int vis[], vector<int> adj[], stack<int> &st) {
+    vis[node] = 1;
+    for(auto it: adj[node]) {
+        if(!vis[it]) dfsTopo(it, vis, adj, st);
+    }
+    st.push(node);
+}
+vector<int> topoSort(int n, vector<int> adj[]) {                  // TopoSort is valid for DAG(Directed Acyclic Grapgh)
+    int vis[n] = {0};
+    stack<int> st;
+    for(int i = 0; i < n; i++) {
+        if(!vis[i]) dfsTopo(i, vis, adj, st);
+    }
+    vector<int> ans;
+    while(!st.empty()) {
+        ans.push_back(st.top());
+        st.pop();
+    }
+    return ans;
+}
 
 
 
