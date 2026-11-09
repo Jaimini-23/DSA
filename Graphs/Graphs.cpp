@@ -590,7 +590,7 @@ vector<int> topoSort(int n, vector<int> adj[]) {                  // TopoSort is
 }
 
 
-vector<int> topologicalSort(int n, vector<int> adj[]) {           // Kahn's Algorithm
+vector<int> topologicalSort(int n, vector<int> adj[]) {           // Kahn's Algorithm (BFS)
     // only for DAG(Directed Acyclic Grapgh)
     // insert all elements with indegree 0 in queue and take them out of the queue and then reduce the indegree of the adjcent nodes
     int indegree[n] = {0};
@@ -618,6 +618,42 @@ vector<int> topologicalSort(int n, vector<int> adj[]) {           // Kahn's Algo
     
     // Cycle detection using Kahn's algo: if(topo.size() == n) cycle does not exist
     // else cycle exists
+}
+
+
+vector<int> eventualSafeNodes(vector<vector<int>>& adj) {
+    int V = adj.size();
+    // Reverse the graph, Indegree in reversed graph = Outdegree in original graph.
+    vector<vector<int>> adjRev(V);
+    vector<int> indegree(V, 0);
+    for(int i = 0; i < V; i++) {
+        for(auto it : adj[i]) {
+            adjRev[it].push_back(i);                 // reverses the edge i → it into it → i
+            indegree[i]++;
+        }
+    }
+    // Push terminal nodes into queue
+    queue<int> q;
+    for(int i = 0; i < V; i++) {
+        if(indegree[i] == 0) {
+            q.push(i);
+        }
+    }
+    // Apply BFS
+    vector<int> safeNodes;
+    while(!q.empty()) {
+        int node = q.front();
+        q.pop();
+        safeNodes.push_back(node);
+        for(auto it : adjRev[node]) {
+            indegree[it]--;
+            if(indegree[it] == 0) {
+                q.push(it);
+            }
+        }
+    }
+    sort(safeNodes.begin(), safeNodes.end());
+    return safeNodes;
 }
 
 
