@@ -657,5 +657,115 @@ vector<int> eventualSafeNodes(vector<vector<int>>& adj) {
 }
 
 
+string findOrder(int n, int k, string dict[]) {
+    vector<int> adj[k];
+    for(int i = 0; i < n-1; i++) {
+        string s1 = dict[i];
+        string s2 = dict[i + 1];
+        int len = min(s1.size(),s2.size());
+        for(int ptr = 0; ptr < len; ptr++) {
+            if(s1[ptr] != s2[ptr]) {
+                adj[s1[ptr] - 'a'].push_back(s2[ptr] - 'a');
+                break;
+            }
+        }
+    }
+    vector<int> topo = topologicalSort(k, adj);
+    string ans = "";
+    for(auto it: topo) {
+        ans = ans + char(it + 'a');
+    }
+    return ans;
+    // when dict is not possible, 1. when larger string comes first with simillar elements like s1 = abcd and s2 = abc
+    // 2. second case is when there is cyclic dependency
+}
+
+
+void topoSort(int node, vector<pair<int,int>> adj[], int vis[], stack<int> &st) {
+    vis[node] = 1;
+    for(auto it : adj[node]) {
+        int v = it.first;
+        if(!vis[v]) {
+            topoSort(v, adj, vis, st);
+        }
+    }
+    st.push(node);
+}
+vector<int> shortestPath(int N, int M, vector<vector<int>>& edges) {
+    // Create adjacency list
+    vector<pair<int,int>> adj[N];
+    for(int i = 0; i < M; i++) {
+        int u = edges[i][0];
+        int v = edges[i][1];
+        int wt = edges[i][2];
+        adj[u].push_back({v, wt});
+    }
+    // Find topological sort
+    int vis[N] = {0};
+    stack<int> st;
+    for(int i = 0; i < N; i++) {
+        if(!vis[i]) {
+            topoSort(i, adj, vis, st);
+        }
+    }
+    // Initialize distance array
+    vector<int> dist(N, 1e9);
+    dist[0] = 0;
+    // Calculate shortest paths
+    while(!st.empty()) {
+        int node = st.top();
+        st.pop();
+        if(dist[node] != 1e9) {
+            for(auto it : adj[node]) {
+                int v = it.first;
+                int wt = it.second;
+                if(dist[node] + wt < dist[v]) {
+                    dist[v] = dist[node] + wt;
+                }
+            }
+        }
+    }
+    // Replace unreachable nodes with -1
+    for(int i = 0; i < N; i++) {
+        if(dist[i] == 1e9) {
+            dist[i] = -1;
+        }
+    }
+    return dist;
+}
+
+
+vector<int> shortestPath(vector<vector<int>> &edges, int n, int m, int src) {
+    vector<int> adj[n];
+    for(auto it : edges) {
+        adj[it[0]].push_back(it[1]);
+        adj[it[1]].push_back(it[0]);
+    }
+    vector<int> dist(n, 1e9);
+    queue<int> q;
+    dist[src] = 0;
+    q.push(src);
+
+    while(!q.empty()) {
+        int node = q.front();
+        q.pop();
+        for(auto it : adj[node]) {
+            if(dist[node] + 1 < dist[it]) {          // Because we want to update the distance only if we have found a shorter path to that node
+                dist[it] = 1 + dist[node];
+                q.push(it);
+            }
+        }
+    }
+    vector<int> ans(n, -1);
+    for(int i = 0; i < n; i++) {
+        if(dist[i] != 1e9) {
+            ans[i] = dist[i];
+        }
+    }
+
+    return ans;
+}
+
+
 
 
