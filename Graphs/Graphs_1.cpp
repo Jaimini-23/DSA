@@ -657,7 +657,7 @@ vector<int> eventualSafeNodes(vector<vector<int>>& adj) {
 }
 
 
-string findOrder(int n, int k, string dict[]) {
+string findOrder(int n, int k, string dict[]) {          // alien dictionary
     vector<int> adj[k];
     for(int i = 0; i < n-1; i++) {
         string s1 = dict[i];
@@ -691,7 +691,7 @@ void topoSort(int node, vector<pair<int,int>> adj[], int vis[], stack<int> &st) 
     }
     st.push(node);
 }
-vector<int> shortestPath(int N, int M, vector<vector<int>>& edges) {
+vector<int> shortestPath(int N, int M, vector<vector<int>>& edges) {         // for directed acyclic graph 
     // Create adjacency list
     vector<pair<int,int>> adj[N];
     for(int i = 0; i < M; i++) {
@@ -735,7 +735,7 @@ vector<int> shortestPath(int N, int M, vector<vector<int>>& edges) {
 }
 
 
-vector<int> shortestPath(vector<vector<int>> &edges, int n, int m, int src) {
+vector<int> shortestPath(vector<vector<int>> &edges, int n, int m, int src) {             // for undirected graph with unit weight
     vector<int> adj[n];
     for(auto it : edges) {
         adj[it[0]].push_back(it[1]);
