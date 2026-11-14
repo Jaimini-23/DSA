@@ -151,6 +151,58 @@ public:
 };
 
 
+vector<int> dijkstra(int n, vector<vector<int>> adj[], int s) {             // Dijkstra's Algorithm
+    // Dijkstra does not work correctly with negative edge weights. For those, consider Bellman-Ford
+    // using Priority Queue, because edge weights can differ and we need the minimum distance first (to remove unnecessary iterations)
+    // TC: O(E * logn)
+    priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
+    vector<int> dist(n);
+    for(int i = 0; i < n; i++) dist[i] = 1e9;
+    dist[s] = 0;
+    pq.push({0,s});
+
+    while(!pq.empty()) {
+        int dis = pq.top().first;
+        int node = pq.top().second;
+        pq.pop();
+
+        for(auto it: adj[node]) {
+            int edgeWeight = it[1];
+            int adjNode = it[0];
+            if(dis + edgeWeight < dist[adjNode]) {
+                dist[adjNode] = dis + edgeWeight;
+                pq.push({dist[adjNode],adjNode});
+            }
+        }
+    }
+    return dist;
+
+
+    // using Set, can remove the previously stored distance whenever a shorter path is found, ensuring that only the updated distance remains and avoiding unnecessary processing of outdated entries
+    set<pair<int,int>> st;
+    vector<int> d(n,1e9);
+    st.insert({0,s});
+    d[s] = 0;
+
+    while(!st.empty()) {
+        auto it = *(st.begin());
+        int node = it.second;
+        int dis = it.first;
+        st.erase(it);
+
+        for(auto it: adj[node]) {
+            int adjNode = it[0];
+            int edgeWeight = it[1];
+            if(dis + edgeWeight < d[adjNode]) {
+                st.erase({d[adjNode],adjNode});
+                d[adjNode] = dis + edgeWeight;
+                st.insert(d[adjNode],adjNode);
+            }
+        }
+    }
+    return d;
+}
+
 
 
 
